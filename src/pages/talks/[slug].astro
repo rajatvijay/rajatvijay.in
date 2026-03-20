@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const talks = await getCollection('talks');
+  return talks.map(talk => ({
+    params: { slug: talk.id },
+    props: { talk },
+  }));
+}
+
+const { talk } = Astro.props;
+const { Content } = await render(talk);
+const data = talk.data;
+
+const allTalks = (await getCollection('talks')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const currentIndex = allTalks.findIndex(t => t.id === talk.id);
+const nextTalk = currentIndex < allTalks.length - 1 ? allTalks[currentIndex + 1] : undefined;
+const prevTalk = currentIndex > 0 ? allTalks[currentIndex - 1] : undefined;
+---
+
+<BaseLayout title={`${data.title} — Rajat`} description={data.description}>
+  <div class="container" style="padding-top: 40px;">
+    <a href="/talks" class="back-link meta">← All talks</a>
+
+    <div class="talk-header">
+      <span class="label accent-text">{data.event}</span>
+      <h1>{data.title}</h1>
+      <p class="meta">
+        {data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        &middot; {data.duration}
+      </p>
+    </div>
+
+    {data.youtubeId && (
+      <div class="video-container">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${data.youtubeId}?rel=0&modestbranding=1`}
+          title={data.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    )}
+
+    {!data.youtubeId && (
+      <div class="no-video surface-card">
+        <p class="secondary-text">Video not yet available for this talk.</p>
+      </div>
+    )}
+
+    <div class="talk-body">
+      <div class="talk-content">
+        <Content />
+      </div>
+
+      <aside class="talk-sidebar">
+        <div class="sidebar-section surface-card">
+          <span class="label">DETAILS</span>
+          <dl class="details-list">
+            <dt>Event</dt>
+            <dd>{data.event}</dd>
+            <dt>Date</dt>
+            <dd>{data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</dd>
+            <dt>Duration</dt>
+            <dd>{data.duration}</dd>
+          </dl>
+
+          {data.slidesUrl && (
+            <a href={data.slidesUrl} class="btn" style="margin-top: 16px; width: 100%; justify-content: center;" target="_blank" rel="noopener noreferrer">
+              Download slides ↓
+            </a>
+          )}
+        </div>
+      </aside>
+    </div>
+
+    <nav class="talk-nav">
+      {prevTalk ? (
+        <a href={`/talks/${prevTalk.id}`} class="talk-nav-link prev">
+          <span class="meta">← Newer</span>
+          <span class="talk-nav-title">{prevTalk.data.title}</span>
+        </a>
+      ) : <div />}
+      {nextTalk ? (
+        <a href={`/talks/${nextTalk.id}`} class="talk-nav-link next">
+          <span class="meta">Older →</span>
+          <span class="talk-nav-title">{nextTalk.data.title}</span>
+        </a>
+      ) : <div />}
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link { color: var(--text-secondary); }
+  .back-link:hover { color: var(--text-primary); }
+
+  .talk-header {
+    margin: 24px 0 32px;
+  }
+  .talk-header h1 {
+    margin: 8px 0 4px;
+  }
+
+  /* YouTube embed — responsive 16:9 with rounded corners */
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--neutral-900);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .no-video {
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .talk-body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+    margin-top: 40px;
+  }
+  .talk-content {
+    line-height: 1.7;
+  }
+  .talk-content :global(p) {
+    margin-bottom: 16px;
+  }
+
+  .sidebar-section {
+    position: sticky;
+    top: 80px;
+  }
+  .details-list {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    font-size: 14px;
+  }
+  .details-list dt {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .details-list dd {
+    margin: 0;
+  }
+
+  .talk-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    gap: 16px;
+  }
+  .talk-nav-link {
+    color: var(--text-secondary);
+    max-width: 45%;
+  }
+  .talk-nav-link:hover { color: var(--text-primary); }
+  .talk-nav-link.next { text-align: right; }
+  .talk-nav-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 2px;
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .talk-body {
+      grid-template-columns: 1fr;
+    }
+    .sidebar-section {
+      position: static;
+    }
+    .talk-nav {
+      flex-direction: column;
+    }
+    .talk-nav-link { max-width: 100%; }
+    .talk-nav-link.next { text-align: left; }
+  }
+</style>

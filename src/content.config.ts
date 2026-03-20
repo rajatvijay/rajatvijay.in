@@ -35,4 +35,18 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects };
+const talks = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/talks' }),
+  schema: z.object({
+    title: z.string(),
+    event: z.string(),
+    date: z.coerce.date(),
+    duration: z.string(),
+    featured: z.boolean().default(false),
+    youtubeId: z.string().default(''),
+    slidesUrl: z.string().default(''),
+    description: z.string(),
+  }),
+});
+
+export const collections = { blog, projects, talks };
