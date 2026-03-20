@@ -70,7 +70,7 @@ const prevTalk = currentIndex > 0 ? allTalks[currentIndex - 1] : undefined;
 
           {data.slidesUrl && (
             <a href={data.slidesUrl} class="btn" style="margin-top: 16px; width: 100%; justify-content: center;" target="_blank" rel="noopener noreferrer">
-              Download slides ↓
+              View slides →
             </a>
           )}
         </div>
@@ -78,16 +78,16 @@ const prevTalk = currentIndex > 0 ? allTalks[currentIndex - 1] : undefined;
     </div>
 
     <nav class="talk-nav">
-      {prevTalk ? (
-        <a href={`/talks/${prevTalk.id}`} class="talk-nav-link prev">
-          <span class="meta">← Newer</span>
-          <span class="talk-nav-title">{prevTalk.data.title}</span>
+      {nextTalk ? (
+        <a href={`/talks/${nextTalk.id}`} class="talk-nav-link prev">
+          <span class="meta">← Older</span>
+          <span class="talk-nav-title">{nextTalk.data.title}</span>
         </a>
       ) : <div />}
-      {nextTalk ? (
-        <a href={`/talks/${nextTalk.id}`} class="talk-nav-link next">
-          <span class="meta">Older →</span>
-          <span class="talk-nav-title">{nextTalk.data.title}</span>
+      {prevTalk ? (
+        <a href={`/talks/${prevTalk.id}`} class="talk-nav-link next">
+          <span class="meta">Newer →</span>
+          <span class="talk-nav-title">{prevTalk.data.title}</span>
         </a>
       ) : <div />}
     </nav>

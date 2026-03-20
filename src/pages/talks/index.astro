@@ -15,28 +15,35 @@ const rest = allTalks.filter(t => !t.data.featured);
     </p>
 
     {featured && (
-      <a href={`/talks/${featured.id}`} class="featured-talk surface-card">
+      <div class="featured-talk surface-card">
         <div class="featured-grid">
-          <div class="video-thumb">
+          <div class="featured-video">
             {featured.data.youtubeId ? (
-              <img
-                src={`https://img.youtube.com/vi/${featured.data.youtubeId}/maxresdefault.jpg`}
-                alt={`Thumbnail for ${featured.data.title}`}
-                loading="eager"
-              />
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${featured.data.youtubeId}?rel=0&modestbranding=1`}
+                title={featured.data.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
             ) : (
               <div class="thumb-placeholder"></div>
             )}
-            <div class="play-btn">&#9654;</div>
           </div>
           <div class="featured-info">
             <span class="label accent-text">FEATURED TALK</span>
-            <h2>{featured.data.title}</h2>
+            <a href={`/talks/${featured.id}`} class="featured-title-link">
+              <h2>{featured.data.title}</h2>
+            </a>
             <p class="meta">{featured.data.event} &middot; {featured.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} &middot; {featured.data.duration}</p>
             <p class="featured-desc">{featured.data.description}</p>
+            <div class="featured-actions">
+              <a href={`/talks/${featured.id}`} class="teal-text">Read more →</a>
+              {featured.data.slidesUrl && <a href={featured.data.slidesUrl} target="_blank" rel="noopener noreferrer" class="teal-text">View slides</a>}
+            </div>
           </div>
         </div>
-      </a>
+      </div>
     )}
 
     <section style="margin-top: 48px;">
@@ -61,72 +68,61 @@ const rest = allTalks.filter(t => !t.data.featured);
 
 <style>
   .featured-talk {
-    display: block;
     border-left: 3px solid var(--accent);
     overflow: hidden;
-    color: var(--text-primary);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .featured-talk:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    color: var(--text-primary);
   }
   .featured-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
   }
-  .video-thumb {
+  .featured-video {
     position: relative;
+    padding-bottom: 56.25%;
     border-radius: 8px;
     overflow: hidden;
-    aspect-ratio: 16/9;
     background: var(--neutral-900);
   }
-  .video-thumb img {
+  .featured-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border: 0;
   }
   .thumb-placeholder {
-    width: 100%;
-    height: 100%;
-    background: var(--neutral-800);
-  }
-  .play-btn {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .featured-talk:hover .play-btn {
-    background: var(--accent);
-    transform: translate(-50%, -50%) scale(1.1);
+    inset: 0;
+    background: var(--neutral-800);
   }
   .featured-info {
     min-width: 0;
+  }
+  .featured-title-link {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .featured-title-link:hover h2 {
+    color: var(--accent-text);
   }
   .featured-info h2 {
     font-size: 22px;
     margin: 8px 0 4px;
     word-wrap: break-word;
+    transition: color 0.2s;
   }
   .featured-desc {
     font-size: 14px;
     color: var(--text-secondary);
     margin-top: 12px;
     line-height: 1.6;
+  }
+  .featured-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 14px;
   }
   .talks-list {
     display: flex;
