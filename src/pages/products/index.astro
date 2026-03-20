@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allProducts = await getCollection('products');
+
+const typeLabels: Record<string, string> = {
+  web: 'Web App',
+  mobile: 'Mobile',
+  oss: 'Open Source',
+  template: 'Template',
+  download: 'Download',
+};
+const pricingLabels: Record<string, string> = {
+  free: 'Free',
+  freemium: 'Freemium',
+  paid: 'Paid',
+  subscription: 'Subscription',
+};
+---
+
+<BaseLayout title="Products — Rajat" description="Tools, apps, and projects I've built and make available for free or via subscription.">
+  <div class="container" style="padding-top: 48px;">
+    <h1>Products</h1>
+    <p class="secondary-text" style="margin: 8px 0 40px;">
+      Things I've built that you can use — apps, tools, templates, and open source projects.
+    </p>
+
+    <div class="products-grid">
+      {allProducts.map(product => (
+        <a href={`/products/${product.id}`} class:list={['product-card', 'surface-card', { featured: product.data.featured }]}>
+          <div class="product-top">
+            <div class="product-icon" style={`background: ${product.data.color}`}>
+              {product.data.icon && <span class="product-emoji">{product.data.icon}</span>}
+            </div>
+            {product.data.status !== 'live' && (
+              <span class:list={['status-badge', product.data.status]}>
+                {product.data.status === 'beta' ? 'Beta' : 'Coming soon'}
+              </span>
+            )}
+          </div>
+          <h2 class="product-title">{product.data.title}</h2>
+          <p class="product-tagline">{product.data.tagline}</p>
+          <div class="product-pills">
+            <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
+            <span class:list={['pill', product.data.pricing === 'free' || product.data.pricing === 'freemium' ? 'pill-teal' : 'pill-coral']}>
+              {pricingLabels[product.data.pricing]}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .product-card {
+    display: block;
+    color: var(--text-primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    color: var(--text-primary);
+  }
+  .product-card.featured {
+    border-left: 3px solid var(--accent);
+  }
+  .product-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .product-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-emoji {
+    font-size: 18px;
+  }
+  .status-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .status-badge.beta {
+    background: var(--teal-50);
+    color: var(--teal-800);
+  }
+  .status-badge.coming-soon {
+    background: var(--neutral-200);
+    color: var(--neutral-600);
+  }
+  :global(.dark) .status-badge.beta {
+    background: var(--teal-900);
+    color: var(--teal-200);
+  }
+  :global(.dark) .status-badge.coming-soon {
+    background: var(--neutral-800);
+    color: var(--neutral-400);
+  }
+  .product-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .product-card:hover .product-title {
+    color: var(--accent-text);
+  }
+  .product-tagline {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .product-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 768px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

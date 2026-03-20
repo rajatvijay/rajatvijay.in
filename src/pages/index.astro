@@ -9,6 +9,7 @@ import { formatDateShort } from '../utils/formatDate';
 import { getGitHubData } from '../utils/github';
 const allPosts = await getSortedPosts();
 const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
+const featuredProducts = (await getCollection('products')).filter(p => p.data.featured);
 const github = await getGitHubData();
 
 const levelClass = ['none', 'low', 'med', 'high'];
@@ -82,6 +83,19 @@ const levelClass = ['none', 'low', 'med', 'high'];
             <div class="project-color" style={`background: ${project.data.color}`}></div>
             <h3>{project.data.title}</h3>
             <p class="meta">{project.data.subtitle}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="selected-products">
+      <span class="label">PRODUCTS</span>
+      <div class="product-cards">
+        {featuredProducts.map(product => (
+          <a href={`/products/${product.id}`} class="product-card surface-card">
+            <div class="product-color" style={`background: ${product.data.color}`}></div>
+            <h3>{product.data.title}</h3>
+            <p class="meta">{product.data.tagline}</p>
           </a>
         ))}
       </div>
@@ -231,10 +245,44 @@ const levelClass = ['none', 'low', 'med', 'high'];
     font-weight: 500;
     margin-bottom: 4px;
   }
+  .selected-products {
+    margin: 40px 0;
+  }
+  .selected-products .label {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .product-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .product-card {
+    color: var(--text-primary);
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    color: var(--text-primary);
+  }
+  .product-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .product-card h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 24px; }
     .home-grid { grid-template-columns: 1fr; }
     .project-cards { grid-template-columns: 1fr; }
+    .product-cards { grid-template-columns: 1fr; }
     .hero-ctas { flex-direction: column; }
   }
 </style>

@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map(product => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+const data = product.data;
+
+const typeLabels: Record<string, string> = {
+  web: 'Web App',
+  mobile: 'Mobile',
+  oss: 'Open Source',
+  template: 'Template',
+  download: 'Download',
+};
+const pricingLabels: Record<string, string> = {
+  free: 'Free',
+  freemium: 'Freemium',
+  paid: 'Paid',
+  subscription: 'Subscription',
+};
+
+function getCtaLabel(pricing: string, type: string, status: string): string {
+  if (status === 'coming-soon') return 'Notify me';
+  if (type === 'oss') return 'View on GitHub →';
+  if (pricing === 'free' && type === 'mobile') return 'Download →';
+  if (pricing === 'free') return 'Try it free →';
+  if (pricing === 'freemium') return 'Try it free →';
+  return 'Get started →';
+}
+const ctaLabel = getCtaLabel(data.pricing, data.type, data.status);
+---
+
+<BaseLayout title={`${data.title} — Rajat`} description={data.description}>
+  <div class="container" style="padding-top: 40px;">
+    <a href="/products" class="back-link meta">← All products</a>
+
+    <div class="product-header">
+      <div class="product-icon" style={`background: ${data.color}`}>
+        {data.icon && <span class="product-emoji">{data.icon}</span>}
+      </div>
+      <div>
+        <h1 style="margin-bottom: 4px;">{data.title}</h1>
+        <p class="secondary-text">{data.tagline}</p>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <span class="pill pill-teal">{typeLabels[data.type]}</span>
+      <span class:list={['pill', data.pricing === 'free' || data.pricing === 'freemium' ? 'pill-teal' : 'pill-coral']}>
+        {pricingLabels[data.pricing]}
+      </span>
+      {data.status !== 'live' && (
+        <span class:list={['status-badge', data.status]}>
+          {data.status === 'beta' ? 'Beta' : 'Coming soon'}
+        </span>
+      )}
+    </div>
+
+    {data.techStack.length > 0 && (
+      <div class="tech-row">
+        {data.techStack.map(tech => (
+          <span class="tech-pill">{tech}</span>
+        ))}
+      </div>
+    )}
+
+    <a
+      href={data.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={['btn', 'btn-primary', 'cta-btn', { disabled: data.status === 'coming-soon' }]}
+    >
+      {ctaLabel}
+    </a>
+
+    <hr class="divider" />
+
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link { color: var(--text-secondary); }
+  .back-link:hover { color: var(--text-primary); }
+  .product-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0 16px;
+  }
+  .product-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-emoji { font-size: 22px; }
+  .meta-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .status-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .status-badge.beta {
+    background: var(--teal-50);
+    color: var(--teal-800);
+  }
+  .status-badge.coming-soon {
+    background: var(--neutral-200);
+    color: var(--neutral-600);
+  }
+  :global(.dark) .status-badge.beta {
+    background: var(--teal-900);
+    color: var(--teal-200);
+  }
+  :global(.dark) .status-badge.coming-soon {
+    background: var(--neutral-800);
+    color: var(--neutral-400);
+  }
+  .tech-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .cta-btn {
+    margin-bottom: 32px;
+  }
+  .cta-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 32px;
+  }
+  .prose {
+    line-height: 1.7;
+    max-width: 720px;
+  }
+  .prose :global(h2) {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-top: 48px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .prose :global(h3) {
+    margin-top: 28px;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  .prose :global(p) {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+  .prose :global(ul) {
+    list-style: none;
+    margin-bottom: 16px;
+    padding-left: 20px;
+  }
+  .prose :global(ul li) {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+  }
+  .prose :global(ul li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+  .prose :global(strong) {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
+    color: var(--text-secondary);
+    margin: 24px 0;
+  }
+</style>

@@ -49,4 +49,21 @@ const talks = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, talks };
+const products = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/products' }),
+  schema: z.object({
+    title: z.string(),
+    tagline: z.string(),
+    description: z.string(),
+    color: hexColor,
+    icon: z.string().default(''),
+    type: z.enum(['web', 'mobile', 'oss', 'template', 'download']),
+    pricing: z.enum(['free', 'freemium', 'paid', 'subscription']),
+    url: z.string().url(),
+    featured: z.boolean().default(false),
+    techStack: z.array(z.string()).default([]),
+    status: z.enum(['live', 'beta', 'coming-soon']).default('live'),
+  }),
+});
+
+export const collections = { blog, projects, talks, products };
