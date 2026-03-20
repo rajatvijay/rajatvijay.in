@@ -29,7 +29,7 @@ const writingItems = [
 
   <div class="bip-grid">
     <div class="bip-column">
-      <h3 class="accent-text">Code</h3>
+      <h3 class="bip-heading">Code</h3>
       <p class="meta">via GitHub</p>
       <ul class="bip-list">
         {codeItems.map(item => (
@@ -49,16 +49,16 @@ const writingItems = [
     </div>
 
     <div class="bip-column">
-      <h3 class="accent-text">Shipping</h3>
+      <h3 class="bip-heading">Shipping</h3>
       <p class="meta">via Linear</p>
       <ul class="bip-list">
         {shippingItems.map(item => (
           <li>
             <div>
               <span class="bip-title">{item.title}</span>
-              <span class="meta" style={`color: ${item.status === 'In progress' ? 'var(--accent)' : item.status === 'In review' ? 'var(--teal)' : 'var(--text-muted)'}`}>{item.status}</span>
+              <span class="meta" style={`color: ${item.status === 'In progress' ? 'var(--accent-text)' : item.status === 'In review' ? 'var(--teal-text)' : 'var(--text-muted)'}`}>{item.status}</span>
             </div>
-            <div class="progress-bar">
+            <div class="progress-bar" role="progressbar" aria-valuenow={item.progress} aria-valuemin={0} aria-valuemax={100} aria-label={`${item.title}: ${item.progress}% complete`}>
               <div class="progress-fill" style={`width: ${item.progress}%`}></div>
             </div>
           </li>
@@ -71,7 +71,7 @@ const writingItems = [
     </div>
 
     <div class="bip-column">
-      <h3 class="accent-text">Writing</h3>
+      <h3 class="bip-heading">Writing</h3>
       <p class="meta">blog & X</p>
       <ul class="bip-list">
         {writingItems.map(item => (
@@ -128,10 +128,11 @@ const writingItems = [
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
-  .bip-column h3 {
+  .bip-heading {
     font-size: 15px;
     font-weight: 500;
     margin-bottom: 2px;
+    color: var(--accent-text);
   }
   .bip-list {
     list-style: none;

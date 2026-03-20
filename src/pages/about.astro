@@ -102,8 +102,8 @@ const uniqueLegend = Object.entries(typeColors).reduce<{ type: string; label: st
 
     <section class="about-section">
       <span class="label accent-text">A TYPICAL DAY AS DIRECTOR OF ENG & AI</span>
-      <p class="meta" style="margin: 4px 0 16px;">Hover blocks for details</p>
-      <div class="day-timeline">
+      <p class="meta" style="margin: 4px 0 16px;">Focus or hover blocks for details</p>
+      <div class="day-timeline" role="list" aria-label="Typical daily schedule">
         <div class="day-hours">
           {hours.map(h => (
             <span class="day-hour" style={`left: ${h.left}%`}>{h.label}</span>
@@ -113,8 +113,10 @@ const uniqueLegend = Object.entries(typeColors).reduce<{ type: string; label: st
           {scheduleBlocks.map(block => (
             <div
               class="day-block"
+              role="listitem"
+              tabindex="0"
               style={`left: ${block.left}%; width: ${block.width}%; background: ${block.color}`}
-              title={`${block.label}: ${block.description}`}
+              aria-label={`${block.start}–${block.end}: ${block.label} — ${block.description}`}
             >
               {block.width > 8 && <span class="day-block-label">{block.label}</span>}
             </div>
