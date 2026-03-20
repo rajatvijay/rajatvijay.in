@@ -53,7 +53,7 @@ export async function getTwitterData(): Promise<TwitterData | null> {
     const userRes = await fetchTwitterAPI(
       `/users/by/username/${TWITTER_USERNAME}?user.fields=pinned_tweet_id`
     );
-    if (!userRes?.data) return fallbackData();
+    if (!userRes?.data) return null;
 
     const userId = userRes.data.id;
     const pinnedId = userRes.data.pinned_tweet_id;
@@ -62,7 +62,7 @@ export async function getTwitterData(): Promise<TwitterData | null> {
     const tweetsRes = await fetchTwitterAPI(
       `/users/${userId}/tweets?max_results=5&tweet.fields=created_at,public_metrics&exclude=replies,retweets`
     );
-    if (!tweetsRes?.data) return fallbackData();
+    if (!tweetsRes?.data) return null;
 
     const allTweets: Tweet[] = tweetsRes.data.map((t: any) => ({
       id: t.id,
