@@ -7,8 +7,7 @@ import readingData from '../data/reading.json';
   <div class="container content-width" style="padding-top: 48px;">
     <h1>What I'm Reading</h1>
     <p class="secondary-text" style="margin: 8px 0 40px;">
-      Books, papers, and articles I'm reading or recently finished.
-      Updated monthly. Signals intellectual curiosity and gives people conversation starters.
+      Books, papers, and articles I'm reading or recently finished. Updated monthly.
     </p>
 
     <div class="shelf">
@@ -34,7 +33,7 @@ import readingData from '../data/reading.json';
       <div class="takes-list">
         {readingData.map(book => (
           <div class="take-item">
-            <a href="#" class="teal-text" style="font-weight: 500; font-size: 14px;">{book.title}:</a>
+            <span class="teal-text" style="font-weight: 500; font-size: 14px;">{book.title}:</span>
             <span style="font-size: 14px;">{book.quickTake}</span>
           </div>
         ))}

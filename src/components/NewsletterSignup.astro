@@ -13,7 +13,7 @@ const { variant = 'inline' } = Astro.props;
       Weekly essays on building AI products, leading engineering teams,
       and the messy path from frontend to AI leadership.
     </p>
-    <form class="newsletter-form" action="#" method="post">
+    <form class="newsletter-form" id="newsletter-form">
       <label for="newsletter-email" class="sr-only">Email address</label>
       <input
         type="email"
@@ -25,13 +25,30 @@ const { variant = 'inline' } = Astro.props;
         class="newsletter-input"
         aria-describedby="newsletter-note"
       />
-      <button type="submit" class="btn-primary btn">Subscribe</button>
+      <button type="submit" class="btn-primary btn" id="newsletter-btn">Subscribe</button>
     </form>
     <p class="newsletter-note meta" id="newsletter-note">
       Join 840+ engineering leaders &middot; No spam &middot; Unsubscribe anytime
     </p>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll('#newsletter-form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('#newsletter-btn');
+      if (btn) {
+        btn.textContent = 'Coming soon!';
+        btn.setAttribute('disabled', 'true');
+        setTimeout(() => {
+          btn.textContent = 'Subscribe';
+          btn.removeAttribute('disabled');
+        }, 3000);
+      }
+    });
+  });
+</script>
 
 <style>
   .newsletter {

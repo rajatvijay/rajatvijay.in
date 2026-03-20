@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getSortedPosts } from '../../utils/posts';
+import { formatDateLong } from '../../utils/formatDate';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const { getSortedPosts: getPosts } = await import('../../utils/posts');
+  const posts = await getPosts();
   return posts.map(post => ({
     params: { slug: post.id },
     props: { post },
@@ -13,13 +16,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const allPosts = await getSortedPosts();
 const currentIndex = allPosts.findIndex(p => p.id === post.id);
-const nextPost = allPosts[currentIndex - 1];
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-}
+const nextPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev';
 ---
 
 <BaseLayout title={`${post.data.title} — Rajat`} description={post.data.description}>
@@ -36,7 +36,7 @@ function formatDate(date: Date) {
 
     <h1 class="post-title">{post.data.title}</h1>
     <div class="post-meta meta">
-      <span>{formatDate(post.data.date)}</span>
+      <span>{formatDateLong(post.data.date)}</span>
       <span>&middot;</span>
       <span>{post.data.readTime} min read</span>
     </div>
@@ -54,14 +54,14 @@ function formatDate(date: Date) {
 
     <div class="share-row">
       <span class="meta">Share:</span>
-      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`https://rajat.dev/writing/${post.id}`)}`} target="_blank" rel="noopener" class="teal-text">X / Twitter</a>
-      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://rajat.dev/writing/${post.id}`)}`} target="_blank" rel="noopener" class="teal-text">LinkedIn</a>
+      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">X / Twitter</a>
+      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">LinkedIn</a>
       <button class="copy-link teal-text" id="copy-link">Copy link</button>
     </div>
 
     {nextPost && (
       <a href={`/writing/${nextPost.id}`} class="next-post">
-        <span class="meta">Next: {nextPost.data.title} →</span>
+        <span class="meta">Older: {nextPost.data.title} →</span>
       </a>
     )}
 
@@ -78,13 +78,14 @@ function formatDate(date: Date) {
       const progress = Math.min(Math.round((scrollTop / docHeight) * 100), 100);
       progressBar.style.width = `${progress}%`;
       progressBar.setAttribute('aria-valuenow', String(progress));
-    });
+    }, { passive: true });
   }
 
   const copyBtn = document.getElementById('copy-link');
   copyBtn?.addEventListener('click', () => {
-    navigator.clipboard.writeText(window.location.href);
-    copyBtn.textContent = 'Copied!';
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => { copyBtn.textContent = 'Copied!'; })
+      .catch(() => { copyBtn.textContent = 'Failed'; });
     setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
   });
 </script>

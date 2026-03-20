@@ -1,6 +1,8 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const hexColor = z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a hex color like #D85A30');
+
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
@@ -8,8 +10,9 @@ const blog = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()),
-    readTime: z.number(),
+    readTime: z.number().positive().int(),
     featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
     tldr: z.string().optional(),
   }),
 });
@@ -22,7 +25,7 @@ const projects = defineCollection({
     role: z.string(),
     timeline: z.string(),
     team: z.string(),
-    color: z.string(),
+    color: hexColor,
     techStack: z.array(z.string()),
     featured: z.boolean().default(false),
     problem: z.string(),

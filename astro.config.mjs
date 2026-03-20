@@ -3,10 +3,15 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://rajat.dev',
+  trailingSlash: 'never',
+  prefetch: true,
   integrations: [sitemap()],
   markdown: {
     shikiConfig: {
-      theme: 'github-light',
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
     },
   },
 });

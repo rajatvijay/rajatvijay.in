@@ -4,13 +4,23 @@ import TheArc from '../components/TheArc.astro';
 import MetricsStrip from '../components/MetricsStrip.astro';
 import BuildingInPublic from '../components/BuildingInPublic.astro';
 import { getCollection } from 'astro:content';
+import { getSortedPosts } from '../utils/posts';
+import { formatDateShort } from '../utils/formatDate';
 
-const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const allPosts = await getSortedPosts();
 const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+// Seeded PRNG for deterministic contribution grid
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
 }
+const contribCells = Array.from({ length: 52 }, (_, i) =>
+  Array.from({ length: 7 }, (_, j) => {
+    const level = seededRandom(i * 7 + j + 42);
+    return level > 0.7 ? 'high' : level > 0.4 ? 'med' : level > 0.15 ? 'low' : 'none';
+  })
+);
 ---
 
 <BaseLayout title="Rajat — Director of Engineering & AI">
@@ -26,7 +36,7 @@ function formatDate(date: Date) {
     </p>
     <div class="hero-ctas">
       <a href="/writing" class="btn">Read the blog</a>
-      <a href="https://twitter.com/rajatvijay" class="btn" target="_blank" rel="noopener">Follow on X →</a>
+      <a href="https://twitter.com/rajatvijay" class="btn" target="_blank" rel="noopener noreferrer">Follow on X →</a>
     </div>
   </section>
 
@@ -42,7 +52,7 @@ function formatDate(date: Date) {
             <li>
               <a href={`/writing/${post.id}`} class="post-link">
                 <span class="post-title">{post.data.title}</span>
-                <span class="meta">{formatDate(post.data.date)} &middot; {post.data.readTime} min</span>
+                <span class="meta">{formatDateShort(post.data.date)} &middot; {post.data.readTime} min</span>
               </a>
             </li>
           ))}
@@ -53,14 +63,12 @@ function formatDate(date: Date) {
         <span class="label">ACTIVITY</span>
         <div class="github-widget surface-card">
           <p class="meta" style="margin-bottom: 8px; font-weight: 500;">GitHub</p>
-          <div class="contrib-grid" role="img" aria-label="GitHub contribution graph showing 284 contributions in the last year">
-            {Array.from({ length: 52 }, (_, i) => (
+          <div class="contrib-grid" role="img" aria-label="GitHub contribution graph showing recent activity">
+            {contribCells.map(col => (
               <div class="contrib-col">
-                {Array.from({ length: 7 }, (_, j) => {
-                  const level = Math.random();
-                  const cls = level > 0.7 ? 'high' : level > 0.4 ? 'med' : level > 0.15 ? 'low' : 'none';
-                  return <div class={`contrib-cell ${cls}`} />;
-                })}
+                {col.map(cls => (
+                  <div class={`contrib-cell ${cls}`} />
+                ))}
               </div>
             ))}
           </div>

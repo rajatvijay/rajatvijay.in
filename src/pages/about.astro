@@ -69,9 +69,9 @@ const uniqueLegend = Object.entries(typeColors).reduce<{ type: string; label: st
           and write about the path from frontend to AI leadership.
         </p>
         <div class="social-links">
-          <a href="https://twitter.com/rajatvijay" target="_blank" rel="noopener" class="teal-text">X / Twitter</a>
-          <a href="https://github.com/rajatvijay" target="_blank" rel="noopener" class="teal-text">GitHub</a>
-          <a href="https://linkedin.com/in/rajatvijay" target="_blank" rel="noopener" class="teal-text">LinkedIn</a>
+          <a href="https://twitter.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="teal-text">X / Twitter</a>
+          <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="teal-text">GitHub</a>
+          <a href="https://linkedin.com/in/rajatvijay" target="_blank" rel="noopener noreferrer" class="teal-text">LinkedIn</a>
         </div>
       </div>
     </div>
@@ -153,14 +153,12 @@ const uniqueLegend = Object.entries(typeColors).reduce<{ type: string; label: st
     </section>
 
     <section class="about-section">
-      <span class="label accent-text">THINGS I BELIEVE</span>
-      <div class="beliefs-list">
+      <h2 class="label accent-text">THINGS I BELIEVE</h2>
+      <ul class="beliefs-list">
         {beliefs.map(b => (
-          <div class="belief-item">
-            <p>{b}</p>
-          </div>
+          <li class="belief-item">{b}</li>
         ))}
-      </div>
+      </ul>
     </section>
 
     <div class="colophon surface-card">

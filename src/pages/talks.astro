@@ -49,9 +49,13 @@ const allTalks = talksData.filter(t => !t.featured);
               <p class="meta">{talk.event} &middot; {talk.date} &middot; {talk.duration}</p>
             </div>
             <div class="talk-actions">
-              {talk.hasVideo && <span class="teal-text" style="font-size: 14px;">Video</span>}
-              {talk.hasSlides && <span class="teal-text" style="font-size: 14px;">Slides</span>}
-              {talk.hasVideo && talk.hasSlides && <span class="teal-text" style="font-size: 14px;">Video + Slides</span>}
+              {talk.hasVideo && talk.hasSlides ? (
+                <span class="teal-text talk-action-link">Video + Slides</span>
+              ) : talk.hasVideo ? (
+                <span class="teal-text talk-action-link">Video</span>
+              ) : talk.hasSlides ? (
+                <span class="teal-text talk-action-link">Slides</span>
+              ) : null}
             </div>
           </div>
         ))}
