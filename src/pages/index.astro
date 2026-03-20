@@ -7,12 +7,9 @@ import { getCollection } from 'astro:content';
 import { getSortedPosts } from '../utils/posts';
 import { formatDateShort } from '../utils/formatDate';
 import { getGitHubData } from '../utils/github';
-import { getTwitterData } from '../utils/twitter';
-
 const allPosts = await getSortedPosts();
 const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
 const github = await getGitHubData();
-const tweets = await getTwitterData();
 
 const levelClass = ['none', 'low', 'med', 'high'];
 ---
@@ -67,49 +64,23 @@ const levelClass = ['none', 'low', 'med', 'high'];
             ))}
           </div>
         </div>
-        {tweets ? (
-          <div class="x-feed">
-            {tweets.pinned && (
-              <a href={tweets.pinned.url} target="_blank" rel="noopener noreferrer" class="tweet-card surface-card pinned">
-                <div class="tweet-header">
-                  <span class="tweet-author">{tweets.handle}</span>
-                  <span class="tweet-pin meta">Pinned</span>
-                </div>
-                <p class="tweet-text">{tweets.pinned.text}</p>
-                <div class="tweet-footer meta">
-                  <span>{tweets.pinned.date}</span>
-                  <span class="tweet-stats">
-                    <span>&#9829; {tweets.pinned.likes}</span>
-                    <span>&#8635; {tweets.pinned.retweets}</span>
-                  </span>
-                </div>
-              </a>
-            )}
-            {tweets.recent.map(tweet => (
-              <a href={tweet.url} target="_blank" rel="noopener noreferrer" class="tweet-card surface-card">
-                <div class="tweet-header">
-                  <span class="tweet-author">{tweets.handle}</span>
-                  <span class="meta">{tweet.date}</span>
-                </div>
-                <p class="tweet-text">{tweet.text}</p>
-                <div class="tweet-footer meta">
-                  <span class="tweet-stats">
-                    <span>&#9829; {tweet.likes}</span>
-                    <span>&#8635; {tweet.retweets}</span>
-                  </span>
-                </div>
-              </a>
-            ))}
-            <a href={tweets.profileUrl} target="_blank" rel="noopener noreferrer" class="x-follow-link teal-text">
-              Follow on X →
+        <div class="connect-card surface-card">
+          <p class="label" style="margin-bottom: 12px;">CONNECT</p>
+          <div class="connect-links">
+            <a href="https://x.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
+              <span class="connect-platform">X / Twitter</span>
+              <span class="meta">@rajatvijay</span>
+            </a>
+            <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
+              <span class="connect-platform">GitHub</span>
+              <span class="meta">{github.contributions.totalContributions} contributions</span>
+            </a>
+            <a href="https://linkedin.com/in/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
+              <span class="connect-platform">LinkedIn</span>
+              <span class="meta">Connect →</span>
             </a>
           </div>
-        ) : (
-          <a href="https://x.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="surface-card x-placeholder">
-            <p class="meta" style="font-weight: 500;">Follow on X</p>
-            <p class="secondary-text" style="font-size: 14px;">@rajatvijay →</p>
-          </a>
-        )}
+        </div>
       </section>
     </div>
 
@@ -210,59 +181,29 @@ const levelClass = ['none', 'low', 'med', 'high'];
   :global(.dark) .contrib-cell.low { background: var(--teal-900); }
   :global(.dark) .contrib-cell.med { background: var(--teal-800); }
   :global(.dark) .contrib-cell.high { background: var(--teal-600); }
-  .x-feed {
+  .connect-card {
+    padding: 16px 20px;
+  }
+  .connect-links {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
   }
-  .tweet-card {
-    display: block;
-    padding: 16px;
-    color: var(--text-primary);
-    transition: border-color 0.2s;
-  }
-  .tweet-card:hover {
-    border-color: var(--text-muted);
-    color: var(--text-primary);
-  }
-  .tweet-card.pinned {
-    border-left: 3px solid var(--accent);
-  }
-  .tweet-header {
+  .connect-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
   }
-  .tweet-author {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-  .tweet-pin {
-    font-size: 11px;
-    color: var(--accent-text);
-    font-weight: 500;
-  }
-  .tweet-text {
-    font-size: 14px;
-    line-height: 1.5;
-    white-space: pre-line;
-  }
-  .tweet-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-  }
-  .tweet-stats {
-    display: flex;
-    gap: 12px;
-  }
-  .x-follow-link {
+  .connect-link:last-child { border-bottom: none; }
+  .connect-link:hover { color: var(--text-primary); }
+  .connect-link:hover .connect-platform { color: var(--accent-text); }
+  .connect-platform {
     font-size: 14px;
     font-weight: 500;
-    padding-top: 4px;
+    transition: color 0.2s;
   }
   .selected-projects {
     margin: 40px 0;
