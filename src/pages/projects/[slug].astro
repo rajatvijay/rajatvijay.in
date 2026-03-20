@@ -95,29 +95,87 @@ const data = project.data;
   }
   .prose {
     line-height: 1.7;
+    max-width: 720px;
   }
+
+  /* H2 — section labels in coral uppercase, like the rest of the site */
   .prose :global(h2) {
-    margin-top: 40px;
-    margin-bottom: 16px;
-  }
-  .prose :global(h3) {
-    margin-top: 32px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-top: 48px;
     margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
   }
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  /* H3 — bold inline headings for key points */
+  .prose :global(h3) {
+    margin-top: 28px;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
   .prose :global(p) {
     margin-bottom: 16px;
+    color: var(--text-secondary);
   }
+
+  /* Lists — teal bullet markers */
   .prose :global(ul), .prose :global(ol) {
     margin-bottom: 16px;
-    padding-left: 24px;
+    padding-left: 20px;
   }
-  .prose :global(li) {
-    margin-bottom: 4px;
+  .prose :global(ul) {
+    list-style: none;
   }
+  .prose :global(ul li) {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+  }
+  .prose :global(ul li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+  .prose :global(ol li) {
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+  }
+
+  /* Strong text — primary color so it pops from secondary body */
+  .prose :global(strong) {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* Blockquotes — coral left border callout */
   .prose :global(blockquote) {
     border-left: 3px solid var(--accent);
-    padding-left: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
     color: var(--text-secondary);
+    margin: 24px 0;
+  }
+  .prose :global(blockquote p) {
+    margin-bottom: 0;
+  }
+
+  /* Code blocks */
+  .prose :global(pre) {
     margin: 24px 0;
   }
   @media (max-width: 768px) {
