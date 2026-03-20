@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Thinking in Systems",
+    "author": "D. Meadows",
+    "status": "Reading",
+    "color": "#1D9E75",
+    "quickTake": "Changed how I think about org design"
+  },
+  {
+    "title": "Staff Engineer",
+    "author": "W. Larson",
+    "status": "Finished",
+    "color": "#D85A30",
+    "quickTake": "Essential for the IC→leadership transition"
+  },
+  {
+    "title": "Designing Data Apps",
+    "author": "B. Wilke",
+    "status": "Reading",
+    "color": "#6B6860",
+    "quickTake": "Shaping our analytics product thinking"
+  },
+  {
+    "title": "The Art of Action",
+    "author": "S. Bungay",
+    "status": "Finished",
+    "color": "#993C1D",
+    "quickTake": "Strategy execution for engineering orgs"
+  }
+]

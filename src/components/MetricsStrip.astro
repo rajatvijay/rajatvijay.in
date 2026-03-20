@@ -1,0 +1,42 @@
+---
+const metrics = [
+  { value: '25', label: 'Engineers led', color: 'var(--accent)' },
+  { value: '4', label: 'AI products shipped', color: 'var(--accent)' },
+  { value: '12', label: 'Enterprise clients', color: 'var(--teal)' },
+  { value: '284', label: 'GitHub contributions', color: 'var(--teal)' },
+];
+---
+
+<section class="metrics-strip">
+  {metrics.map(m => (
+    <div class="metric-card surface-card">
+      <span class="metric-value" style={`color: ${m.color}`}>{m.value}</span>
+      <span class="meta">{m.label}</span>
+    </div>
+  ))}
+</section>
+
+<style>
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 32px 0;
+  }
+  .metric-card {
+    text-align: center;
+    padding: 20px 12px;
+  }
+  .metric-value {
+    display: block;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  @media (max-width: 768px) {
+    .metrics-strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const totalPosts = allPosts.length;
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
+---
+
+<BaseLayout title="Writing — Rajat" description="Essays on building AI products, leading engineering teams, and the path from frontend to AI leadership.">
+  <div class="container" style="padding-top: 48px;">
+    <h1>Writing</h1>
+    <p class="secondary-text" style="margin: 8px 0 32px;">
+      Essays on building AI products, leading engineering teams, and the path from frontend to AI leadership.
+    </p>
+
+    <div class="tags-row">
+      {allTags.map(tag => (
+        <span class="pill pill-coral">{tag}</span>
+      ))}
+    </div>
+
+    <ul class="writing-list">
+      {allPosts.map((post, i) => (
+        <li class="writing-item">
+          <a href={`/writing/${post.id}`} class="writing-link">
+            <div class="writing-meta">
+              <span class="meta">{formatDate(post.data.date)}</span>
+              <span class="meta">{post.data.readTime} min read</span>
+            </div>
+            <h2 class="writing-title">{post.data.title}</h2>
+            <p class="writing-desc secondary-text">{post.data.description}</p>
+            <div class="writing-tags">
+              {post.data.tags.map(tag => (
+                <span class="pill pill-teal" style="font-size: 12px; padding: 2px 8px;">{tag}</span>
+              ))}
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="reading-stats surface-card" style="text-align: center; margin-top: 40px;">
+      <p class="meta">You've discovered all {totalPosts} posts</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .writing-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .writing-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .writing-link {
+    display: block;
+    padding: 24px 0;
+    color: var(--text-primary);
+  }
+  .writing-link:hover { color: var(--text-primary); }
+  .writing-link:hover .writing-title { color: var(--accent); }
+  .writing-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .writing-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .writing-desc {
+    font-size: 15px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .writing-tags {
+    display: flex;
+    gap: 6px;
+  }
+</style>

@@ -1,0 +1,40 @@
+[
+  {
+    "title": "From React to AI Director: The Skills Nobody Told You About",
+    "event": "DPW Amsterdam",
+    "date": "Feb 2026",
+    "duration": "32 min",
+    "featured": true,
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "timestamps": [
+      { "time": "4:32", "label": "Why frontend skills transfer" },
+      { "time": "14:08", "label": "Multi-agent architecture" },
+      { "time": "22:15", "label": "Hiring without ML credentials" }
+    ]
+  },
+  {
+    "title": "Building No-Code with LLMs",
+    "event": "Internal Tech Talk",
+    "date": "Jan 2026",
+    "duration": "28 min",
+    "featured": false,
+    "hasVideo": true,
+    "hasSlides": true
+  },
+  {
+    "title": "LLM Data Isolation in Enterprise",
+    "event": "Mayo RFP Presentation",
+    "date": "Dec 2025",
+    "duration": "45 min",
+    "featured": false,
+    "hasSlides": true
+  },
+  {
+    "title": "The Automation Championship",
+    "event": "Certa All-Hands",
+    "date": "Nov 2025",
+    "duration": "15 min",
+    "featured": false,
+    "hasVideo": true
+  }
+]

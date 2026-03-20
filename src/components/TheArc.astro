@@ -1,0 +1,76 @@
+---
+---
+
+<section class="the-arc surface-card">
+  <p class="label">THE ARC</p>
+  <div class="arc-timeline">
+    <div class="arc-item">
+      <span class="arc-phase label">Early career</span>
+      <div class="arc-dot"></div>
+      <h3>Frontend engineer</h3>
+      <p class="meta">React, TypeScript, design systems</p>
+    </div>
+    <div class="arc-item">
+      <span class="arc-phase label">The pivot</span>
+      <div class="arc-dot active"></div>
+      <h3>Took on AI initiatives</h3>
+      <p class="meta">Self-taught ML, led first GenAI products</p>
+    </div>
+    <div class="arc-item">
+      <span class="arc-phase label">Now</span>
+      <div class="arc-dot now"></div>
+      <h3>Director of Eng & AI at Certa</h3>
+      <p class="meta">25-person team &middot; Series B</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .the-arc {
+    padding: 28px 32px;
+  }
+  .arc-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 16px;
+    padding-left: 20px;
+    border-left: 2px solid var(--border);
+  }
+  .arc-item {
+    position: relative;
+    padding-left: 20px;
+  }
+  .arc-phase {
+    display: block;
+    margin-bottom: 2px;
+  }
+  .arc-dot {
+    position: absolute;
+    left: -27px;
+    top: 24px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    border: 2px solid var(--surface);
+  }
+  .arc-dot.active {
+    background: var(--teal);
+  }
+  .arc-dot.now {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--coral-50);
+  }
+  :global(.dark) .arc-dot.now {
+    box-shadow: 0 0 0 3px var(--coral-900);
+  }
+  .arc-item h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  @media (max-width: 768px) {
+    .the-arc { padding: 20px; }
+  }
+</style>

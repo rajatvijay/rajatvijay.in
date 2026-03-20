@@ -1,0 +1,211 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TheArc from '../components/TheArc.astro';
+import MetricsStrip from '../components/MetricsStrip.astro';
+import BuildingInPublic from '../components/BuildingInPublic.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+---
+
+<BaseLayout title="Rajat — Director of Engineering & AI">
+  <section class="hero container">
+    <span class="label accent-text">DIRECTOR OF ENGINEERING & AI</span>
+    <h1 class="hero-title">
+      I went from writing React components<br />
+      to leading AI at a Series B —<br />
+      <span class="accent-text">without an ML degree.</span>
+    </h1>
+    <p class="hero-sub secondary-text">
+      Building workflow automation and TPRM products at Certa.
+    </p>
+    <div class="hero-ctas">
+      <a href="/writing" class="btn">Read the blog</a>
+      <a href="https://twitter.com/rajatvijay" class="btn" target="_blank" rel="noopener">Follow on X →</a>
+    </div>
+  </section>
+
+  <div class="container">
+    <TheArc />
+    <MetricsStrip />
+
+    <div class="home-grid">
+      <section class="latest-writing">
+        <span class="label">LATEST WRITING</span>
+        <ul class="post-list">
+          {allPosts.slice(0, 4).map(post => (
+            <li>
+              <a href={`/writing/${post.id}`} class="post-link">
+                <span class="post-title">{post.data.title}</span>
+                <span class="meta">{formatDate(post.data.date)} &middot; {post.data.readTime} min</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="activity-feed">
+        <span class="label">ACTIVITY</span>
+        <div class="github-widget surface-card">
+          <p class="meta" style="margin-bottom: 8px; font-weight: 500;">GitHub</p>
+          <div class="contrib-grid">
+            {Array.from({ length: 52 }, (_, i) => (
+              <div class="contrib-col">
+                {Array.from({ length: 7 }, (_, j) => {
+                  const level = Math.random();
+                  const cls = level > 0.7 ? 'high' : level > 0.4 ? 'med' : level > 0.15 ? 'low' : 'none';
+                  return <div class={`contrib-cell ${cls}`} />;
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="x-widget surface-card">
+          <p class="meta" style="margin-bottom: 4px; font-weight: 500;">Latest on X</p>
+          <p style="font-size: 14px;">Hot take: You don't need an ML degree to lead AI products...</p>
+        </div>
+      </section>
+    </div>
+
+    <BuildingInPublic />
+
+    <section class="selected-projects">
+      <span class="label">SELECTED PROJECTS</span>
+      <div class="project-cards">
+        {allProjects.map(project => (
+          <a href={`/projects/${project.id}`} class="project-card surface-card">
+            <div class="project-color" style={`background: ${project.data.color}`}></div>
+            <h3>{project.data.title}</h3>
+            <p class="meta">{project.data.subtitle}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 80px 24px 40px;
+  }
+  .hero-title {
+    margin: 12px 0 16px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+  }
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin: 32px 0;
+  }
+  .latest-writing .label {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .post-list li {
+    border-bottom: 1px solid var(--border);
+  }
+  .post-link {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 0;
+    color: var(--text-primary);
+  }
+  .post-link:hover { color: var(--text-primary); }
+  .post-link:hover .post-title { color: var(--accent); }
+  .post-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .activity-feed .label {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contrib-grid {
+    display: flex;
+    gap: 2px;
+    overflow: hidden;
+  }
+  .contrib-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .contrib-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--border);
+  }
+  .contrib-cell.low { background: var(--teal-100); }
+  .contrib-cell.med { background: var(--teal-200); }
+  .contrib-cell.high { background: var(--teal-400); }
+  :global(.dark) .contrib-cell { background: var(--border); }
+  :global(.dark) .contrib-cell.low { background: var(--teal-900); }
+  :global(.dark) .contrib-cell.med { background: var(--teal-800); }
+  :global(.dark) .contrib-cell.high { background: var(--teal-600); }
+  .selected-projects {
+    margin: 40px 0;
+  }
+  .selected-projects .label {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .project-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .project-card {
+    color: var(--text-primary);
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    color: var(--text-primary);
+  }
+  .project-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .project-card h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  @media (max-width: 768px) {
+    .hero { padding: 48px 16px 24px; }
+    .home-grid { grid-template-columns: 1fr; }
+    .project-cards { grid-template-columns: 1fr; }
+    .hero-ctas { flex-direction: column; }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <p class="footer-brand">rajat.</p>
+      <p class="meta">Director of Engineering & AI at Certa</p>
+    </div>
+    <div class="footer-links">
+      <a href="/writing">Writing</a>
+      <a href="/projects">Projects</a>
+      <a href="/talks">Talks</a>
+      <a href="/about">About</a>
+      <a href="/reading">Reading</a>
+      <a href="/newsletter">Newsletter</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://twitter.com/rajatvijay" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="https://github.com/rajatvijay" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/rajatvijay" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+    <div class="footer-bottom">
+      <p class="meta">&copy; {year} Rajat. Built with Astro &middot; Inter + Instrument Serif &middot; Vercel</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 80px;
+    padding: 48px 0 32px;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .footer-brand {
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .footer-links, .footer-social {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer-links a, .footer-social a {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .footer-links a:hover, .footer-social a:hover {
+    color: var(--text-primary);
+  }
+  .footer-bottom {
+    grid-column: 1 / -1;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>

@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const data = project.data;
+---
+
+<BaseLayout title={`${data.title} — Rajat`} description={data.subtitle}>
+  <div class="container content-width" style="padding-top: 40px;">
+    <a href="/projects" class="back-link meta">← All projects</a>
+
+    <div class="project-header">
+      <div class="project-icon" style={`background: ${data.color}`}></div>
+      <div>
+        <h1 style="margin-bottom: 4px;">{data.title}</h1>
+        <p class="secondary-text">{data.subtitle}</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card surface-card">
+        <span class="label">Role</span>
+        <span>{data.role}</span>
+      </div>
+      <div class="info-card surface-card">
+        <span class="label">Timeline</span>
+        <span>{data.timeline}</span>
+      </div>
+      <div class="info-card surface-card">
+        <span class="label">Team</span>
+        <span>{data.team}</span>
+      </div>
+    </div>
+
+    <div class="tech-row">
+      {data.techStack.map(tech => (
+        <span class="tech-pill">{tech}</span>
+      ))}
+    </div>
+
+    <hr class="divider" />
+
+    <section>
+      <span class="label accent-text">THE PROBLEM</span>
+      <p style="margin-top: 8px;">{data.problem}</p>
+    </section>
+
+    <hr class="divider" />
+
+    <section>
+      <span class="label accent-text">THE APPROACH</span>
+      <p style="margin-top: 8px;">{data.approach}</p>
+    </section>
+
+    <hr class="divider" />
+
+    <section>
+      <span class="label accent-text">THE IMPACT</span>
+      <div class="impact-grid">
+        {data.impact.map(item => (
+          <div class="impact-card surface-card">
+            <span class="impact-metric accent-text">{item.metric}</span>
+            <span class="meta">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section>
+      <span class="label accent-text">KEY DECISIONS</span>
+      <div class="decisions-list">
+        {data.decisions.map(d => (
+          <div class="decision surface-card">
+            <h3 style="font-size: 15px; margin-bottom: 4px;">{d.title}</h3>
+            <p class="meta">{d.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link { color: var(--text-secondary); }
+  .back-link:hover { color: var(--text-primary); }
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .project-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .info-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+  }
+  .tech-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .impact-card {
+    text-align: center;
+    padding: 24px;
+  }
+  .impact-metric {
+    display: block;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .decisions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 768px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+  }
+</style>

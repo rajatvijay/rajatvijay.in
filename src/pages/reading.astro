@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import readingData from '../data/reading.json';
+---
+
+<BaseLayout title="Reading Shelf — Rajat" description="Books, papers, and articles I'm currently reading or recently finished, with one-line takes.">
+  <div class="container content-width" style="padding-top: 48px;">
+    <h1>What I'm Reading</h1>
+    <p class="secondary-text" style="margin: 8px 0 40px;">
+      Books, papers, and articles I'm reading or recently finished.
+      Updated monthly. Signals intellectual curiosity and gives people conversation starters.
+    </p>
+
+    <div class="shelf">
+      <div class="shelf-header">
+        <span class="label">WHAT I'M READING</span>
+        <span class="meta">Updated March 2026</span>
+      </div>
+      <div class="book-row">
+        {readingData.map(book => (
+          <div class="book-card" style={`border-left: 4px solid ${book.color}`}>
+            <h3 class="book-title" style={`color: ${book.color}`}>{book.title}</h3>
+            <p class="meta book-author">{book.author}</p>
+            <span class:list={['book-status', book.status === 'Reading' ? 'reading' : 'finished']}>
+              {book.status}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <section style="margin-top: 32px;">
+      <span class="label" style="display: block; margin-bottom: 16px;">QUICK TAKES</span>
+      <div class="takes-list">
+        {readingData.map(book => (
+          <div class="take-item">
+            <a href="#" class="teal-text" style="font-weight: 500; font-size: 14px;">{book.title}:</a>
+            <span style="font-size: 14px;">{book.quickTake}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .shelf {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .shelf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .book-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .book-card {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 20px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+  }
+  .book-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .book-author {
+    margin-top: auto;
+  }
+  .book-status {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .book-status.reading {
+    background: var(--teal-50);
+    color: var(--teal-600);
+  }
+  .book-status.finished {
+    background: var(--neutral-200);
+    color: var(--neutral-600);
+  }
+  :global(.dark) .book-status.reading {
+    background: var(--teal-900);
+    color: var(--teal-200);
+  }
+  :global(.dark) .book-status.finished {
+    background: var(--neutral-800);
+    color: var(--neutral-400);
+  }
+  .takes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .take-item {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  @media (max-width: 768px) {
+    .book-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+---
+
+<BaseLayout title="The Frontend→AI Weekly — Rajat" description="Weekly essays on building AI products, leading engineering teams, and the messy path from frontend to AI leadership.">
+  <div class="container content-width" style="padding-top: 80px; padding-bottom: 80px;">
+    <NewsletterSignup variant="full" />
+    <div class="newsletter-info">
+      <h2 style="margin-bottom: 16px;">What to expect</h2>
+      <ul class="expect-list">
+        <li>
+          <strong>Weeks 1 & 3:</strong> Deep posts (1,500-2,500 words) — career arc essays, case studies, opinion pieces.
+        </li>
+        <li>
+          <strong>Weeks 2 & 4:</strong> Signal posts (500-800 words) — quick takes, tool reviews, patterns, decisions.
+        </li>
+      </ul>
+      <p class="secondary-text" style="margin-top: 16px; font-size: 14px;">
+        Delivered Tuesday mornings. Your deep/signal posts auto-delivered via Buttondown.
+        The welcome email sends my cornerstone post: "From React to AI Director."
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .newsletter-info {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 32px 0;
+  }
+  .expect-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .expect-list li {
+    font-size: 15px;
+    line-height: 1.6;
+    padding-left: 16px;
+    border-left: 2px solid var(--border);
+  }
+</style>
