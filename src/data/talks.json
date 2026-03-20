@@ -6,6 +6,7 @@
     "duration": "32 min",
     "featured": true,
     "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "slidesUrl": "#",
     "timestamps": [
       { "time": "4:32", "label": "Why frontend skills transfer" },
       { "time": "14:08", "label": "Multi-agent architecture" },
@@ -18,8 +19,8 @@
     "date": "Jan 2026",
     "duration": "28 min",
     "featured": false,
-    "hasVideo": true,
-    "hasSlides": true
+    "videoUrl": "#",
+    "slidesUrl": "#"
   },
   {
     "title": "LLM Data Isolation in Enterprise",
@@ -27,7 +28,7 @@
     "date": "Dec 2025",
     "duration": "45 min",
     "featured": false,
-    "hasSlides": true
+    "slidesUrl": "#"
   },
   {
     "title": "The Automation Championship",
@@ -35,6 +36,6 @@
     "date": "Nov 2025",
     "duration": "15 min",
     "featured": false,
-    "hasVideo": true
+    "videoUrl": "#"
   }
 ]

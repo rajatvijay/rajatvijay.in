@@ -16,12 +16,14 @@ const allTalks = talksData.filter(t => !t.featured);
     {featured && (
       <div class="featured-talk surface-card">
         <div class="featured-grid">
-          <div class="video-placeholder">
+          <a href={featured.videoUrl} target="_blank" rel="noopener noreferrer" class="video-placeholder">
             <div class="play-btn">&#9654;</div>
-          </div>
+          </a>
           <div class="featured-info">
             <span class="label accent-text">FEATURED TALK</span>
-            <h2 style="margin: 8px 0 4px;">{featured.title}</h2>
+            <h2 style="margin: 8px 0 4px;">
+              <a href={featured.videoUrl} target="_blank" rel="noopener noreferrer" class="featured-title-link">{featured.title}</a>
+            </h2>
             <p class="meta">{featured.event} &middot; {featured.date} &middot; {featured.duration}</p>
             {featured.timestamps && (
               <div class="timestamps">
@@ -34,6 +36,10 @@ const allTalks = talksData.filter(t => !t.featured);
                 ))}
               </div>
             )}
+            <div class="featured-actions" style="margin-top: 16px; display: flex; gap: 12px;">
+              {featured.videoUrl && <a href={featured.videoUrl} target="_blank" rel="noopener noreferrer" class="teal-text">Watch video</a>}
+              {featured.slidesUrl && <a href={featured.slidesUrl} class="teal-text">Download slides</a>}
+            </div>
           </div>
         </div>
       </div>
@@ -49,13 +55,8 @@ const allTalks = talksData.filter(t => !t.featured);
               <p class="meta">{talk.event} &middot; {talk.date} &middot; {talk.duration}</p>
             </div>
             <div class="talk-actions">
-              {talk.hasVideo && talk.hasSlides ? (
-                <span class="teal-text talk-action-link">Video + Slides</span>
-              ) : talk.hasVideo ? (
-                <span class="teal-text talk-action-link">Video</span>
-              ) : talk.hasSlides ? (
-                <span class="teal-text talk-action-link">Slides</span>
-              ) : null}
+              {talk.videoUrl && <a href={talk.videoUrl} target="_blank" rel="noopener noreferrer" class="teal-text">Video</a>}
+              {talk.slidesUrl && <a href={talk.slidesUrl} class="teal-text">Slides</a>}
             </div>
           </div>
         ))}
@@ -90,6 +91,13 @@ const allTalks = talksData.filter(t => !t.featured);
   .featured-info h2 {
     word-wrap: break-word;
   }
+  .video-placeholder:hover {
+    opacity: 0.9;
+  }
+  .video-placeholder:hover .play-btn {
+    background: rgba(255,255,255,0.4);
+    transform: scale(1.1);
+  }
   .play-btn {
     width: 48px;
     height: 48px;
@@ -100,6 +108,14 @@ const allTalks = talksData.filter(t => !t.featured);
     justify-content: center;
     color: white;
     font-size: 18px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .featured-title-link {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .featured-title-link:hover {
+    color: var(--accent-text);
   }
   .timestamps {
     margin-top: 8px;
