@@ -14,29 +14,7 @@ const { product } = Astro.props;
 const { Content } = await render(product);
 const data = product.data;
 
-const typeLabels: Record<string, string> = {
-  web: 'Web App',
-  mobile: 'Mobile',
-  oss: 'Open Source',
-  template: 'Template',
-  download: 'Download',
-};
-const pricingLabels: Record<string, string> = {
-  free: 'Free',
-  freemium: 'Freemium',
-  paid: 'Paid',
-  subscription: 'Subscription',
-};
-
-function getCtaLabel(pricing: string, type: string, status: string): string {
-  if (status === 'coming-soon') return 'Notify me';
-  if (type === 'oss') return 'View on GitHub →';
-  if (pricing === 'free' && type === 'mobile') return 'Download →';
-  if (pricing === 'free') return 'Try it free →';
-  if (pricing === 'freemium') return 'Try it free →';
-  return 'Get started →';
-}
-const ctaLabel = getCtaLabel(data.pricing, data.type, data.status);
+const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
 ---
 
 <BaseLayout title={`${data.title} — Rajat`} description={data.description}>
@@ -44,32 +22,15 @@ const ctaLabel = getCtaLabel(data.pricing, data.type, data.status);
     <a href="/products" class="back-link meta">← All products</a>
 
     <div class="product-header">
-      <div class="product-icon" style={`background: ${data.color}`}>
-        {data.icon && <span class="product-emoji">{data.icon}</span>}
-      </div>
-      <div>
-        <h1 style="margin-bottom: 4px;">{data.title}</h1>
-        <p class="secondary-text">{data.tagline}</p>
-      </div>
+      <h1 style="margin-bottom: 4px;">{data.title}</h1>
+      <p class="secondary-text">{data.tagline}</p>
     </div>
 
-    <div class="meta-row">
-      <span class="pill pill-teal">{typeLabels[data.type]}</span>
-      <span class:list={['pill', data.pricing === 'free' || data.pricing === 'freemium' ? 'pill-teal' : 'pill-coral']}>
-        {pricingLabels[data.pricing]}
-      </span>
-      {data.status !== 'live' && (
+    {data.status !== 'live' && (
+      <div class="meta-row">
         <span class:list={['status-badge', data.status]}>
           {data.status === 'beta' ? 'Beta' : 'Coming soon'}
         </span>
-      )}
-    </div>
-
-    {data.techStack.length > 0 && (
-      <div class="tech-row">
-        {data.techStack.map(tech => (
-          <span class="tech-pill">{tech}</span>
-        ))}
       </div>
     )}
 
@@ -94,21 +55,8 @@ const ctaLabel = getCtaLabel(data.pricing, data.type, data.status);
   .back-link { color: var(--text-secondary); }
   .back-link:hover { color: var(--text-primary); }
   .product-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
     margin: 24px 0 16px;
   }
-  .product-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .product-emoji { font-size: 22px; }
   .meta-row {
     display: flex;
     gap: 8px;
@@ -136,12 +84,6 @@ const ctaLabel = getCtaLabel(data.pricing, data.type, data.status);
   :global(.dark) .status-badge.coming-soon {
     background: var(--neutral-800);
     color: var(--neutral-400);
-  }
-  .tech-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
   }
   .cta-btn {
     margin-bottom: 32px;

@@ -93,7 +93,6 @@ const levelClass = ['none', 'low', 'med', 'high'];
       <div class="product-cards">
         {featuredProducts.map(product => (
           <a href={`/products/${product.id}`} class="product-card surface-card">
-            <div class="product-color" style={`background: ${product.data.color}`}></div>
             <h3>{product.data.title}</h3>
             <p class="meta">{product.data.tagline}</p>
           </a>
@@ -266,12 +265,6 @@ const levelClass = ['none', 'low', 'med', 'high'];
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     color: var(--text-primary);
-  }
-  .product-color {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    margin-bottom: 12px;
   }
   .product-card h3 {
     font-size: 15px;

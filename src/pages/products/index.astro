@@ -11,15 +11,9 @@ const typeLabels: Record<string, string> = {
   template: 'Template',
   download: 'Download',
 };
-const pricingLabels: Record<string, string> = {
-  free: 'Free',
-  freemium: 'Freemium',
-  paid: 'Paid',
-  subscription: 'Subscription',
-};
 ---
 
-<BaseLayout title="Products — Rajat" description="Tools, apps, and projects I've built and make available for free or via subscription.">
+<BaseLayout title="Products — Rajat" description="Tools, apps, and projects I've built that you can use.">
   <div class="container" style="padding-top: 48px;">
     <h1>Products</h1>
     <p class="secondary-text" style="margin: 8px 0 40px;">
@@ -30,23 +24,15 @@ const pricingLabels: Record<string, string> = {
       {allProducts.map(product => (
         <a href={`/products/${product.id}`} class:list={['product-card', 'surface-card', { featured: product.data.featured }]}>
           <div class="product-top">
-            <div class="product-icon" style={`background: ${product.data.color}`}>
-              {product.data.icon && <span class="product-emoji">{product.data.icon}</span>}
-            </div>
+            <h2 class="product-title">{product.data.title}</h2>
             {product.data.status !== 'live' && (
               <span class:list={['status-badge', product.data.status]}>
                 {product.data.status === 'beta' ? 'Beta' : 'Coming soon'}
               </span>
             )}
           </div>
-          <h2 class="product-title">{product.data.title}</h2>
           <p class="product-tagline">{product.data.tagline}</p>
-          <div class="product-pills">
-            <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
-            <span class:list={['pill', product.data.pricing === 'free' || product.data.pricing === 'freemium' ? 'pill-teal' : 'pill-coral']}>
-              {pricingLabels[product.data.pricing]}
-            </span>
-          </div>
+          <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
         </a>
       ))}
     </div>
@@ -76,18 +62,7 @@ const pricingLabels: Record<string, string> = {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 12px;
-  }
-  .product-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .product-emoji {
-    font-size: 18px;
+    margin-bottom: 8px;
   }
   .status-badge {
     font-size: 11px;
@@ -124,11 +99,6 @@ const pricingLabels: Record<string, string> = {
     color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 12px;
-  }
-  .product-pills {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
   }
   @media (max-width: 768px) {
     .products-grid {
