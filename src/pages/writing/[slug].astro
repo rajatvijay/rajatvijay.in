@@ -25,7 +25,7 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
 <BaseLayout title={`${post.data.title} — Rajat`} description={post.data.description}>
   <div class="reading-progress" id="reading-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
 
-  <article class="container content-width" style="padding-top: 40px;">
+  <article class="container" style="padding-top: 40px;">
     <a href="/writing" class="back-link meta">← Back to writing</a>
 
     <div class="post-tags" style="margin: 16px 0 8px;">

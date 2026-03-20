@@ -1,19 +1,16 @@
 ---
-const codeItems = [
-  { title: 'feat: add NL editing to Studio', time: '2h ago', dot: '#1D9E75' },
-  { title: 'fix: schema validation loop', time: '5h ago', dot: '#1D9E75' },
-  { title: 'refactor: agent orchestrator', time: '1d ago', dot: '#6B6860' },
-];
-const shippingItems = [
-  { title: 'Design Agent v2.3', status: 'In progress', progress: 55 },
-  { title: 'LLM Gateway metrics', status: 'In review', progress: 90 },
-  { title: 'DSL migration tool', status: 'Planned', progress: 25 },
-];
-const writingItems = [
-  { title: 'Why agents beat RAG', progress: 60 },
-  { title: 'Claude Code workflows', status: 'Outline', progress: 15 },
-  { title: 'Latest X thread', done: true },
-];
+import type { RecentCommit } from '../utils/github';
+
+interface Props {
+  commits: RecentCommit[];
+  fetchedAt: string;
+}
+
+const { commits, fetchedAt } = Astro.props;
+
+const fetchedDate = new Date(fetchedAt);
+const minutesAgo = Math.max(0, Math.round((Date.now() - fetchedDate.getTime()) / 60000));
+const updatedLabel = minutesAgo < 1 ? 'just now' : minutesAgo < 60 ? `${minutesAgo} min ago` : `${Math.round(minutesAgo / 60)}h ago`;
 ---
 
 <section class="bip">
@@ -23,77 +20,24 @@ const writingItems = [
     </div>
     <div class="bip-status">
       <span class="status-dot"></span>
-      <span class="meta">Updated 14 min ago</span>
+      <span class="meta">Updated {updatedLabel}</span>
     </div>
   </div>
 
-  <div class="bip-grid">
-    <div class="bip-column">
-      <h3 class="bip-heading">Code</h3>
-      <p class="meta">via GitHub</p>
-      <ul class="bip-list">
-        {codeItems.map(item => (
-          <li>
-            <span class="bip-dot" style={`background: ${item.dot}`}></span>
-            <div>
-              <span class="bip-title">{item.title}</span>
-              <span class="meta">{item.time}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div class="bip-stat">
-        <span class="bip-stat-value">12</span>
-        <span class="meta">day streak</span>
-      </div>
-    </div>
-
-    <div class="bip-column">
-      <h3 class="bip-heading">Shipping</h3>
-      <p class="meta">via Linear</p>
-      <ul class="bip-list">
-        {shippingItems.map(item => (
-          <li>
-            <div>
-              <span class="bip-title">{item.title}</span>
-              <span class="meta" style={`color: ${item.status === 'In progress' ? 'var(--accent-text)' : item.status === 'In review' ? 'var(--teal-text)' : 'var(--text-muted)'}`}>{item.status}</span>
-            </div>
-            <div class="progress-bar" role="progressbar" aria-valuenow={item.progress} aria-valuemin={0} aria-valuemax={100} aria-label={`${item.title}: ${item.progress}% complete`}>
-              <div class="progress-fill" style={`width: ${item.progress}%`}></div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div class="bip-stat">
-        <span class="bip-stat-value">3</span>
-        <span class="meta">items this sprint</span>
-      </div>
-    </div>
-
-    <div class="bip-column">
-      <h3 class="bip-heading">Writing</h3>
-      <p class="meta">blog & X</p>
-      <ul class="bip-list">
-        {writingItems.map(item => (
-          <li>
-            <div>
-              <span class="bip-title">{item.title}</span>
-              {item.done ? (
-                <span class="meta teal-text">&#10003;</span>
-              ) : item.status ? (
-                <span class="meta">{item.status}</span>
-              ) : (
-                <span class="meta">{item.progress}%</span>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div class="bip-stat">
-        <span class="bip-stat-value">2</span>
-        <span class="meta">posts in progress</span>
-      </div>
-    </div>
+  <div class="bip-content">
+    <h3 class="bip-heading">Recent code</h3>
+    <p class="meta">via GitHub</p>
+    <ul class="bip-list">
+      {commits.map(commit => (
+        <li>
+          <span class="bip-dot"></span>
+          <div>
+            <span class="bip-title">{commit.message}</span>
+            <span class="meta">{commit.repo} &middot; {commit.date}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
 
@@ -123,11 +67,6 @@ const writingItems = [
     background: var(--teal);
     display: inline-block;
   }
-  .bip-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
   .bip-heading {
     font-size: 15px;
     font-weight: 500;
@@ -152,39 +91,11 @@ const writingItems = [
     border-radius: 50%;
     flex-shrink: 0;
     margin-top: 6px;
+    background: var(--teal);
   }
   .bip-title {
     display: block;
     font-size: 13px;
     font-weight: 500;
-  }
-  .bip-stat {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-  }
-  .bip-stat-value {
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-right: 4px;
-  }
-  .progress-bar {
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin-top: 6px;
-    width: 100%;
-  }
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-    transition: width 0.3s;
-  }
-  @media (max-width: 768px) {
-    .bip-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>

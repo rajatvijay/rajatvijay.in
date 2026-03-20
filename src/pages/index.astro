@@ -6,21 +6,13 @@ import BuildingInPublic from '../components/BuildingInPublic.astro';
 import { getCollection } from 'astro:content';
 import { getSortedPosts } from '../utils/posts';
 import { formatDateShort } from '../utils/formatDate';
+import { getGitHubData } from '../utils/github';
 
 const allPosts = await getSortedPosts();
 const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
+const github = await getGitHubData();
 
-// Seeded PRNG for deterministic contribution grid
-function seededRandom(seed: number) {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
-}
-const contribCells = Array.from({ length: 52 }, (_, i) =>
-  Array.from({ length: 7 }, (_, j) => {
-    const level = seededRandom(i * 7 + j + 42);
-    return level > 0.7 ? 'high' : level > 0.4 ? 'med' : level > 0.15 ? 'low' : 'none';
-  })
-);
+const levelClass = ['none', 'low', 'med', 'high'];
 ---
 
 <BaseLayout title="Rajat — Director of Engineering & AI">
@@ -63,11 +55,11 @@ const contribCells = Array.from({ length: 52 }, (_, i) =>
         <span class="label">ACTIVITY</span>
         <div class="github-widget surface-card">
           <p class="meta" style="margin-bottom: 8px; font-weight: 500;">GitHub</p>
-          <div class="contrib-grid" role="img" aria-label="GitHub contribution graph showing recent activity">
-            {contribCells.map(col => (
+          <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
+            {github.contributions.weeks.map(week => (
               <div class="contrib-col">
-                {col.map(cls => (
-                  <div class={`contrib-cell ${cls}`} />
+                {week.levels.map(level => (
+                  <div class={`contrib-cell ${levelClass[level]}`} />
                 ))}
               </div>
             ))}
@@ -80,7 +72,7 @@ const contribCells = Array.from({ length: 52 }, (_, i) =>
       </section>
     </div>
 
-    <BuildingInPublic />
+    <BuildingInPublic commits={github.recentCommits} fetchedAt={github.fetchedAt} />
 
     <section class="selected-projects">
       <span class="label">SELECTED PROJECTS</span>
