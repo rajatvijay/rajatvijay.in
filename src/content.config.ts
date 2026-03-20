@@ -31,7 +31,7 @@ const projects = defineCollection({
     problem: z.string(),
     approach: z.string(),
     impact: z.array(z.object({ metric: z.string(), label: z.string() })),
-    decisions: z.array(z.object({ title: z.string(), detail: z.string() })),
+    decisions: z.array(z.object({ title: z.string(), detail: z.string() })).optional(),
   }),
 });
 

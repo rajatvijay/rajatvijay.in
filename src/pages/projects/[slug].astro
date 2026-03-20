@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -11,6 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+const { Content } = await render(project);
 const data = project.data;
 ---
 
@@ -26,68 +27,26 @@ const data = project.data;
       </div>
     </div>
 
-    <div class="info-grid">
-      <div class="info-card surface-card">
-        <span class="label">Role</span>
-        <span>{data.role}</span>
-      </div>
-      <div class="info-card surface-card">
-        <span class="label">Timeline</span>
-        <span>{data.timeline}</span>
-      </div>
-      <div class="info-card surface-card">
-        <span class="label">Team</span>
-        <span>{data.team}</span>
-      </div>
-    </div>
-
     <div class="tech-row">
       {data.techStack.map(tech => (
         <span class="tech-pill">{tech}</span>
       ))}
     </div>
 
-    <hr class="divider" />
-
-    <section>
-      <span class="label accent-text">THE PROBLEM</span>
-      <p style="margin-top: 8px;">{data.problem}</p>
-    </section>
-
-    <hr class="divider" />
-
-    <section>
-      <span class="label accent-text">THE APPROACH</span>
-      <p style="margin-top: 8px;">{data.approach}</p>
-    </section>
+    <div class="impact-grid">
+      {data.impact.map(item => (
+        <div class="impact-card surface-card">
+          <span class="impact-metric accent-text">{item.metric}</span>
+          <span class="meta">{item.label}</span>
+        </div>
+      ))}
+    </div>
 
     <hr class="divider" />
 
-    <section>
-      <span class="label accent-text">THE IMPACT</span>
-      <div class="impact-grid">
-        {data.impact.map(item => (
-          <div class="impact-card surface-card">
-            <span class="impact-metric accent-text">{item.metric}</span>
-            <span class="meta">{item.label}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <hr class="divider" />
-
-    <section>
-      <span class="label accent-text">KEY DECISIONS</span>
-      <div class="decisions-list">
-        {data.decisions.map(d => (
-          <div class="decision surface-card">
-            <h3 style="font-size: 15px; margin-bottom: 4px;">{d.title}</h3>
-            <p class="meta">{d.detail}</p>
-          </div>
-        ))}
-      </div>
-    </section>
+    <div class="prose">
+      <Content />
+    </div>
   </div>
 </BaseLayout>
 
@@ -106,34 +65,17 @@ const data = project.data;
     border-radius: 12px;
     flex-shrink: 0;
   }
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 24px 0;
-  }
-  .info-card {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 14px;
-  }
   .tech-row {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     margin-bottom: 24px;
   }
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 32px 0;
-  }
   .impact-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin-top: 16px;
+    margin-bottom: 32px;
   }
   .impact-card {
     text-align: center;
@@ -146,14 +88,39 @@ const data = project.data;
     letter-spacing: -0.5px;
     margin-bottom: 4px;
   }
-  .decisions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 16px;
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 32px;
+  }
+  .prose {
+    line-height: 1.7;
+  }
+  .prose :global(h2) {
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+  .prose :global(h3) {
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  .prose :global(p) {
+    margin-bottom: 16px;
+  }
+  .prose :global(ul), .prose :global(ol) {
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+  .prose :global(li) {
+    margin-bottom: 4px;
+  }
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+    color: var(--text-secondary);
+    margin: 24px 0;
   }
   @media (max-width: 768px) {
-    .info-grid { grid-template-columns: 1fr; }
     .impact-grid { grid-template-columns: 1fr; }
   }
 </style>

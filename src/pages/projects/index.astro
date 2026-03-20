@@ -20,20 +20,6 @@ const allProjects = await getCollection('projects');
             <h2 style="font-size: 20px; margin-bottom: 4px;">{project.data.title}</h2>
             <p class="meta">{project.data.subtitle}</p>
           </div>
-          <div class="project-quick-info">
-            <div class="info-item">
-              <span class="label">Role</span>
-              <span>{project.data.role}</span>
-            </div>
-            <div class="info-item">
-              <span class="label">Timeline</span>
-              <span>{project.data.timeline}</span>
-            </div>
-            <div class="info-item">
-              <span class="label">Team</span>
-              <span>{project.data.team}</span>
-            </div>
-          </div>
           <div class="project-tech">
             {project.data.techStack.map(tech => (
               <span class="tech-pill">{tech}</span>
@@ -67,29 +53,10 @@ const allProjects = await getCollection('projects');
     border-radius: 10px;
     margin-bottom: 16px;
   }
-  .project-quick-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 16px 0;
-    background: var(--bg);
-    border-radius: 8px;
-    padding: 12px 16px;
-  }
-  .info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 14px;
-  }
   .project-tech {
+    margin-top: 12px;
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-  }
-  @media (max-width: 768px) {
-    .project-quick-info {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
