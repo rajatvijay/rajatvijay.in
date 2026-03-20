@@ -65,23 +65,9 @@ const levelClass = ['none', 'low', 'med', 'high'];
           </div>
         </div>
         <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
-          <p class="label accent-text" style="margin-bottom: 8px;">BOOK A 1:1</p>
-          <p class="topmate-tagline">Career advice, mock interviews, or just a tech chat.</p>
-          <div class="topmate-services">
-            <div class="topmate-service">
-              <span class="topmate-name">Priority DM</span>
-              <span class="topmate-price">&#8377;100</span>
-            </div>
-            <div class="topmate-service">
-              <span class="topmate-name">Quick Random Chat</span>
-              <span class="topmate-price">&#8377;800</span>
-            </div>
-            <div class="topmate-service">
-              <span class="topmate-name">Senior Dev → Manager</span>
-              <span class="topmate-price">&#8377;1,300</span>
-            </div>
-          </div>
-          <span class="topmate-cta teal-text">View all services →</span>
+          <p class="topmate-heading">Got a question? Let's talk.</p>
+          <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
+          <span class="topmate-cta">Book a 1:1 →</span>
         </a>
       </section>
     </div>
@@ -185,45 +171,32 @@ const levelClass = ['none', 'low', 'med', 'high'];
   :global(.dark) .contrib-cell.high { background: var(--teal-600); }
   .topmate-card {
     display: block;
-    padding: 16px 20px;
+    padding: 20px;
     color: var(--text-primary);
-    transition: border-color 0.2s, transform 0.2s;
+    border-left: 3px solid var(--accent);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
   .topmate-card:hover {
-    border-color: var(--accent);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     color: var(--text-primary);
   }
-  .topmate-tagline {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-  }
-  .topmate-services {
-    display: flex;
-    flex-direction: column;
-  }
-  .topmate-service {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .topmate-service:last-child { border-bottom: none; }
-  .topmate-name { font-weight: 500; }
-  .topmate-price {
+  .topmate-heading {
+    font-size: 16px;
     font-weight: 500;
-    color: var(--accent-text);
-    font-family: var(--font-mono);
+    margin-bottom: 6px;
+  }
+  .topmate-tagline {
     font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
   }
   .topmate-cta {
-    display: block;
-    margin-top: 12px;
+    display: inline-block;
+    margin-top: 14px;
     font-size: 14px;
     font-weight: 500;
+    color: var(--accent-text);
   }
   .selected-projects {
     margin: 40px 0;
