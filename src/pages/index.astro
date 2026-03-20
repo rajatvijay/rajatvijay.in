@@ -64,23 +64,25 @@ const levelClass = ['none', 'low', 'med', 'high'];
             ))}
           </div>
         </div>
-        <div class="connect-card surface-card">
-          <p class="label" style="margin-bottom: 12px;">CONNECT</p>
-          <div class="connect-links">
-            <a href="https://x.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
-              <span class="connect-platform">X / Twitter</span>
-              <span class="meta">@rajatvijay</span>
-            </a>
-            <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
-              <span class="connect-platform">GitHub</span>
-              <span class="meta">{github.contributions.totalContributions} contributions</span>
-            </a>
-            <a href="https://linkedin.com/in/rajatvijay" target="_blank" rel="noopener noreferrer" class="connect-link">
-              <span class="connect-platform">LinkedIn</span>
-              <span class="meta">Connect →</span>
-            </a>
+        <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
+          <p class="label accent-text" style="margin-bottom: 8px;">BOOK A 1:1</p>
+          <p class="topmate-tagline">Career advice, mock interviews, or just a tech chat.</p>
+          <div class="topmate-services">
+            <div class="topmate-service">
+              <span class="topmate-name">Priority DM</span>
+              <span class="topmate-price">&#8377;100</span>
+            </div>
+            <div class="topmate-service">
+              <span class="topmate-name">Quick Random Chat</span>
+              <span class="topmate-price">&#8377;800</span>
+            </div>
+            <div class="topmate-service">
+              <span class="topmate-name">Senior Dev → Manager</span>
+              <span class="topmate-price">&#8377;1,300</span>
+            </div>
           </div>
-        </div>
+          <span class="topmate-cta teal-text">View all services →</span>
+        </a>
       </section>
     </div>
 
@@ -181,29 +183,47 @@ const levelClass = ['none', 'low', 'med', 'high'];
   :global(.dark) .contrib-cell.low { background: var(--teal-900); }
   :global(.dark) .contrib-cell.med { background: var(--teal-800); }
   :global(.dark) .contrib-cell.high { background: var(--teal-600); }
-  .connect-card {
+  .topmate-card {
+    display: block;
     padding: 16px 20px;
+    color: var(--text-primary);
+    transition: border-color 0.2s, transform 0.2s;
   }
-  .connect-links {
+  .topmate-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    color: var(--text-primary);
+  }
+  .topmate-tagline {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .topmate-services {
     display: flex;
     flex-direction: column;
-    gap: 0;
   }
-  .connect-link {
+  .topmate-service {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--border);
-    color: var(--text-primary);
+    font-size: 14px;
   }
-  .connect-link:last-child { border-bottom: none; }
-  .connect-link:hover { color: var(--text-primary); }
-  .connect-link:hover .connect-platform { color: var(--accent-text); }
-  .connect-platform {
+  .topmate-service:last-child { border-bottom: none; }
+  .topmate-name { font-weight: 500; }
+  .topmate-price {
+    font-weight: 500;
+    color: var(--accent-text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .topmate-cta {
+    display: block;
+    margin-top: 12px;
     font-size: 14px;
     font-weight: 500;
-    transition: color 0.2s;
   }
   .selected-projects {
     margin: 40px 0;
