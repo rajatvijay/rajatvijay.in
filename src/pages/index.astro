@@ -17,18 +17,30 @@ const levelClass = ['none', 'low', 'med', 'high'];
 
 <BaseLayout title="Rajat — Director of Engineering & AI">
   <section class="hero container">
-    <span class="label accent-text">DIRECTOR OF ENGINEERING & AI</span>
-    <h1 class="hero-title">
-      I went from writing React components<br />
-      to leading AI at a Series B —<br />
-      <span class="accent-text">without an ML degree.</span>
-    </h1>
+    <div class="hero-intro">
+      <div class="avatar-placeholder"></div>
+      <div>
+        <span class="label accent-text">DIRECTOR OF ENGINEERING & AI</span>
+        <h1 class="hero-title">
+          I went from writing React components<br />
+          to leading AI at a Series B —<br />
+          <span class="accent-text">without an ML degree.</span>
+        </h1>
+      </div>
+    </div>
     <p class="hero-sub secondary-text">
       Building workflow automation and TPRM products at Certa.
     </p>
-    <div class="hero-ctas">
-      <a href="/writing" class="btn">Read the blog</a>
-      <a href="https://twitter.com/rajatvijay" class="btn" target="_blank" rel="noopener noreferrer">Follow on X →</a>
+    <div class="hero-actions">
+      <div class="hero-ctas">
+        <a href="/writing" class="btn">Read the blog</a>
+        <a href="https://topmate.io/rajatvijay" class="btn" target="_blank" rel="noopener noreferrer">Book a 1:1</a>
+      </div>
+      <div class="hero-social">
+        <a href="https://twitter.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="teal-text">X</a>
+        <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="teal-text">GitHub</a>
+        <a href="https://www.linkedin.com/in/rajat-vijay/" target="_blank" rel="noopener noreferrer" class="teal-text">LinkedIn</a>
+      </div>
     </div>
   </section>
 
@@ -106,16 +118,39 @@ const levelClass = ['none', 'low', 'med', 'high'];
   .hero {
     padding: 80px 24px 40px;
   }
+  .hero-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .avatar-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
   .hero-title {
-    margin: 12px 0 16px;
+    margin: 8px 0 16px;
   }
   .hero-sub {
     font-size: 16px;
     margin-bottom: 24px;
   }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
   .hero-ctas {
     display: flex;
     gap: 12px;
+  }
+  .hero-social {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
   }
   .home-grid {
     display: grid;
@@ -273,6 +308,8 @@ const levelClass = ['none', 'low', 'med', 'high'];
   }
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 24px; }
+    .hero-intro { flex-direction: column; align-items: center; text-align: center; }
+    .hero-actions { flex-direction: column; align-items: center; }
     .home-grid { grid-template-columns: 1fr; }
     .project-cards { grid-template-columns: 1fr; }
     .product-cards { grid-template-columns: 1fr; }
