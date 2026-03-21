@@ -5,7 +5,7 @@ date: 2026-02-15
 duration: "32 min"
 featured: true
 youtubeId: "dQw4w9WgXcQ"
-slidesUrl: "#"
+slidesUrl: ""
 description: "The talk that started it all — how frontend engineering skills mapped directly to leading AI product development at scale."
 ---
 

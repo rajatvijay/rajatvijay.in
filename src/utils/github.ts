@@ -1,5 +1,4 @@
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN || process.env.GITHUB_TOKEN;
-const GITHUB_USERNAME = 'rajatvijay';
 
 interface ContributionDay {
   contributionCount: number;
@@ -20,8 +19,7 @@ export interface RecentCommit {
   repo: string;
   message: string;
   date: string;
-  additions: number;
-  deletions: number;
+  rawDate: string;
 }
 
 export interface GitHubData {
@@ -38,9 +36,7 @@ function contributionLevel(count: number): number {
 }
 
 function relativeTime(dateStr: string): string {
-  const now = new Date();
-  const date = new Date(dateStr);
-  const diffMs = now.getTime() - date.getTime();
+  const diffMs = Date.now() - new Date(dateStr).getTime();
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffHours / 24);
   if (diffHours < 1) return 'just now';
@@ -70,7 +66,7 @@ async function fetchGitHub(query: string) {
     return null;
   }
 
-  return res.json();
+  return await res.json();
 }
 
 export async function getGitHubData(): Promise<GitHubData> {
@@ -98,8 +94,6 @@ export async function getGitHubData(): Promise<GitHubData> {
                   nodes {
                     messageHeadline
                     committedDate
-                    additions
-                    deletions
                   }
                 }
               }
@@ -129,32 +123,24 @@ export async function getGitHubData(): Promise<GitHubData> {
       recentCommits.push({
         repo: repo.name,
         message: commit.messageHeadline,
+        rawDate: commit.committedDate,
         date: relativeTime(commit.committedDate),
-        additions: commit.additions,
-        deletions: commit.deletions,
       });
     }
   }
 
-  recentCommits.sort((a, b) => {
-    const order = ['just now', 'h ago', 'd ago', 'mo ago'];
-    const aIdx = order.findIndex(s => a.date.includes(s) || a.date === s);
-    const bIdx = order.findIndex(s => b.date.includes(s) || b.date === s);
-    return aIdx - bIdx;
-  });
+  recentCommits.sort((a, b) =>
+    new Date(b.rawDate).getTime() - new Date(a.rawDate).getTime()
+  );
 
   return {
-    contributions: {
-      totalContributions: calendar.totalContributions,
-      weeks,
-    },
+    contributions: { totalContributions: calendar.totalContributions, weeks },
     recentCommits: recentCommits.slice(0, 5),
     fetchedAt: new Date().toISOString(),
   };
 }
 
 function fallbackData(): GitHubData {
-  // Seeded deterministic fallback when no token is available
   function seededRandom(seed: number) {
     const x = Math.sin(seed) * 10000;
     return x - Math.floor(x);
@@ -169,9 +155,9 @@ function fallbackData(): GitHubData {
   return {
     contributions: { totalContributions: 0, weeks },
     recentCommits: [
-      { repo: 'collaborative-plan-tool', message: 'Prepare for open source release', date: '2d ago', additions: 45, deletions: 12 },
-      { repo: 'mind', message: 'Add iOS Shortcut import link', date: '5d ago', additions: 23, deletions: 3 },
-      { repo: 'chat-notes', message: 'Update service worker cache', date: '1mo ago', additions: 18, deletions: 8 },
+      { repo: 'collaborative-plan-tool', message: 'Prepare for open source release', rawDate: '2026-03-19T00:00:00Z', date: '2d ago' },
+      { repo: 'mind', message: 'Add iOS Shortcut import link', rawDate: '2026-03-14T00:00:00Z', date: '7d ago' },
+      { repo: 'chat-notes', message: 'Update service worker cache', rawDate: '2026-02-20T00:00:00Z', date: '1mo ago' },
     ],
     fetchedAt: new Date().toISOString(),
   };

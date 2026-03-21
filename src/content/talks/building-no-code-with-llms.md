@@ -5,7 +5,7 @@ date: 2026-01-20
 duration: "28 min"
 featured: false
 youtubeId: "dQw4w9WgXcQ"
-slidesUrl: "#"
+slidesUrl: ""
 description: "How we built a design agent that lets users create complex workflows through natural language instead of structured configuration."
 ---
 

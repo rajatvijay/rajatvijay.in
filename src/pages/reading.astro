@@ -1,6 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import readingData from '../data/reading.json';
+
+const hexRegex = /^#[0-9A-Fa-f]{6}$/;
+const safeBooks = readingData.map(book => ({
+  ...book,
+  color: hexRegex.test(book.color) ? book.color : '#6B6860',
+}));
 ---
 
 <BaseLayout title="Reading Shelf — Rajat" description="Books, papers, and articles I'm currently reading or recently finished, with one-line takes.">
@@ -16,7 +22,7 @@ import readingData from '../data/reading.json';
         <span class="meta">Updated March 2026</span>
       </div>
       <div class="book-row">
-        {readingData.map(book => (
+        {safeBooks.map(book => (
           <div class="book-card" style={`border-left: 4px solid ${book.color}`}>
             <h3 class="book-title" style={`color: ${book.color}`}>{book.title}</h3>
             <p class="meta book-author">{book.author}</p>
@@ -31,7 +37,7 @@ import readingData from '../data/reading.json';
     <section style="margin-top: 32px;">
       <span class="label" style="display: block; margin-bottom: 16px;">QUICK TAKES</span>
       <div class="takes-list">
-        {readingData.map(book => (
+        {safeBooks.map(book => (
           <div class="take-item">
             <span class="teal-text" style="font-weight: 500; font-size: 14px;">{book.title}:</span>
             <span style="font-size: 14px;">{book.quickTake}</span>

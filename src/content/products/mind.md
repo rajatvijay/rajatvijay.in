@@ -2,13 +2,9 @@
 title: "Mind"
 tagline: "A second brain with iOS Shortcuts"
 description: "Capture thoughts, bookmarks, and notes from anywhere on your phone via iOS Shortcuts — synced to a simple web UI."
-color: "#1D9E75"
-icon: ""
 type: mobile
-pricing: free
 url: "https://github.com/rajatvijay/mind"
 featured: true
-techStack: ["Swift", "iOS Shortcuts", "Supabase"]
 status: live
 ---
 

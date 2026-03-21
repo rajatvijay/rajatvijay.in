@@ -6,10 +6,9 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  ogImage?: string;
 }
 
-const { title, description = 'Rajat — Director of Engineering & AI at Certa. Building AI products and writing about the path from frontend to AI leadership.', ogImage } = Astro.props;
+const { title, description = 'Rajat — Director of Engineering & AI at Certa. Building AI products and writing about the path from frontend to AI leadership.' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -28,7 +27,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  {ogImage && <meta property="og:image" content={ogImage} />}
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- RSS -->

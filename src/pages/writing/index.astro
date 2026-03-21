@@ -21,7 +21,7 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
     </div>
 
     <ul class="writing-list">
-      {allPosts.map((post, i) => (
+      {allPosts.map(post => (
         <li class="writing-item">
           <a href={`/writing/${post.id}`} class="writing-link">
             <div class="writing-meta">

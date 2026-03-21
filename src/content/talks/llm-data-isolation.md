@@ -5,7 +5,7 @@ date: 2025-12-10
 duration: "45 min"
 featured: false
 youtubeId: ""
-slidesUrl: "#"
+slidesUrl: ""
 description: "How we architected data isolation for LLM workloads in an enterprise TPRM platform with strict compliance requirements."
 ---
 

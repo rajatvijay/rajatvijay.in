@@ -2,13 +2,9 @@
 title: "Chat Notes"
 tagline: "Turn conversations into structured notes"
 description: "A lightweight app that converts chat-style input into organized, searchable notes with AI-powered summarization."
-color: "#6B6860"
-icon: ""
 type: web
-pricing: free
 url: "https://github.com/rajatvijay/chat-notes"
 featured: true
-techStack: ["React", "TypeScript", "OpenAI API"]
 status: live
 ---
 

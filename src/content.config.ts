@@ -2,6 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const hexColor = z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a hex color like #D85A30');
+const youtubeIdFormat = z.string().regex(/^[a-zA-Z0-9_-]{0,11}$/).default('');
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
@@ -22,16 +23,10 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     subtitle: z.string(),
-    role: z.string(),
-    timeline: z.string(),
-    team: z.string(),
     color: hexColor,
     techStack: z.array(z.string()),
     featured: z.boolean().default(false),
-    problem: z.string(),
-    approach: z.string(),
     impact: z.array(z.object({ metric: z.string(), label: z.string() })),
-    decisions: z.array(z.object({ title: z.string(), detail: z.string() })).optional(),
   }),
 });
 
@@ -43,8 +38,8 @@ const talks = defineCollection({
     date: z.coerce.date(),
     duration: z.string(),
     featured: z.boolean().default(false),
-    youtubeId: z.string().default(''),
-    slidesUrl: z.string().default(''),
+    youtubeId: youtubeIdFormat,
+    slidesUrl: z.union([z.string().url(), z.literal('')]).default(''),
     description: z.string(),
   }),
 });
@@ -55,13 +50,9 @@ const products = defineCollection({
     title: z.string(),
     tagline: z.string(),
     description: z.string(),
-    color: hexColor,
-    icon: z.string().default(''),
     type: z.enum(['web', 'mobile', 'oss', 'template', 'download']),
-    pricing: z.enum(['free', 'freemium', 'paid', 'subscription']),
     url: z.string().url(),
     featured: z.boolean().default(false),
-    techStack: z.array(z.string()).default([]),
     status: z.enum(['live', 'beta', 'coming-soon']).default('live'),
   }),
 });

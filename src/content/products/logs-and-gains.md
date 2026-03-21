@@ -2,13 +2,9 @@
 title: "Logs & Gains"
 tagline: "Fitness tracking that stays out of your way"
 description: "A minimal fitness tracker for logging workouts, tracking nutrition, and measuring progress without the bloat."
-color: "#D85A30"
-icon: ""
 type: mobile
-pricing: free
 url: "https://logsandgains.app"
 featured: true
-techStack: ["React Native", "TypeScript", "Supabase"]
 status: live
 ---
 

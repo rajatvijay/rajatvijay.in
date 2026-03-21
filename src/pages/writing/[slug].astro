@@ -6,8 +6,7 @@ import { getSortedPosts } from '../../utils/posts';
 import { formatDateLong } from '../../utils/formatDate';
 
 export async function getStaticPaths() {
-  const { getSortedPosts: getPosts } = await import('../../utils/posts');
-  const posts = await getPosts();
+  const posts = await getSortedPosts();
   return posts.map(post => ({
     params: { slug: post.id },
     props: { post },
@@ -48,7 +47,7 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
       </div>
     )}
 
-    <div class="prose">
+    <div class="prose prose-blog">
       <Content />
     </div>
 
@@ -101,10 +100,6 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
     width: 0%;
     transition: width 0.1s;
   }
-  .back-link {
-    color: var(--text-secondary);
-  }
-  .back-link:hover { color: var(--text-primary); }
   .post-title {
     font-size: 32px;
     font-weight: 500;
@@ -123,31 +118,6 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
   }
   .prose {
     margin: 32px 0;
-    line-height: 1.7;
-  }
-  .prose :global(h2) {
-    margin-top: 40px;
-    margin-bottom: 16px;
-  }
-  .prose :global(h3) {
-    margin-top: 32px;
-    margin-bottom: 12px;
-  }
-  .prose :global(p) {
-    margin-bottom: 16px;
-  }
-  .prose :global(ul), .prose :global(ol) {
-    margin-bottom: 16px;
-    padding-left: 24px;
-  }
-  .prose :global(li) {
-    margin-bottom: 4px;
-  }
-  .prose :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    padding-left: 16px;
-    color: var(--text-secondary);
-    margin: 24px 0;
   }
   .share-row {
     display: flex;

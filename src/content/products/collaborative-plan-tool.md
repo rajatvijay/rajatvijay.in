@@ -2,13 +2,9 @@
 title: "Collaborative Plan"
 tagline: "Real-time collaborative planning for small teams"
 description: "A lightweight collaborative planning tool for small teams — think shared to-do lists with real-time sync and zero onboarding."
-color: "#085041"
-icon: ""
 type: web
-pricing: free
 url: "https://github.com/rajatvijay/collaborative-plan-tool"
 featured: false
-techStack: ["React", "TypeScript", "Firebase"]
 status: live
 ---
 

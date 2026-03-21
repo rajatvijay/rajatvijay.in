@@ -34,14 +34,13 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
       </div>
     )}
 
-    <a
-      href={data.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      class:list={['btn', 'btn-primary', 'cta-btn', { disabled: data.status === 'coming-soon' }]}
-    >
-      {ctaLabel}
-    </a>
+    {data.status === 'coming-soon' ? (
+      <span class="btn cta-btn disabled" aria-disabled="true">Coming soon</span>
+    ) : (
+      <a href={data.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary cta-btn">
+        {ctaLabel}
+      </a>
+    )}
 
     <hr class="divider" />
 
@@ -52,109 +51,9 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
 </BaseLayout>
 
 <style>
-  .back-link { color: var(--text-secondary); }
-  .back-link:hover { color: var(--text-primary); }
-  .product-header {
-    margin: 24px 0 16px;
-  }
-  .meta-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .status-badge {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  .status-badge.beta {
-    background: var(--teal-50);
-    color: var(--teal-800);
-  }
-  .status-badge.coming-soon {
-    background: var(--neutral-200);
-    color: var(--neutral-600);
-  }
-  :global(.dark) .status-badge.beta {
-    background: var(--teal-900);
-    color: var(--teal-200);
-  }
-  :global(.dark) .status-badge.coming-soon {
-    background: var(--neutral-800);
-    color: var(--neutral-400);
-  }
-  .cta-btn {
-    margin-bottom: 32px;
-  }
-  .cta-btn.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 0 0 32px;
-  }
-  .prose {
-    line-height: 1.7;
-    max-width: 720px;
-  }
-  .prose :global(h2) {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--accent-text);
-    margin-top: 48px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .prose :global(h2:first-child) {
-    margin-top: 0;
-  }
-  .prose :global(h3) {
-    margin-top: 28px;
-    margin-bottom: 8px;
-    font-size: 16px;
-  }
-  .prose :global(p) {
-    margin-bottom: 16px;
-    color: var(--text-secondary);
-  }
-  .prose :global(ul) {
-    list-style: none;
-    margin-bottom: 16px;
-    padding-left: 20px;
-  }
-  .prose :global(ul li) {
-    position: relative;
-    padding-left: 16px;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-  }
-  .prose :global(ul li::before) {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--teal);
-  }
-  .prose :global(strong) {
-    color: var(--text-primary);
-    font-weight: 500;
-  }
-  .prose :global(blockquote) {
-    border-left: 3px solid var(--accent);
-    padding: 16px 20px;
-    background: var(--surface);
-    border-radius: 0 8px 8px 0;
-    color: var(--text-secondary);
-    margin: 24px 0;
-  }
+  .product-header { margin: 24px 0 16px; }
+  .meta-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .cta-btn { margin-bottom: 32px; }
+  .cta-btn.disabled { opacity: 0.5; cursor: default; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0 0 32px; }
 </style>
