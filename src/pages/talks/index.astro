@@ -58,6 +58,7 @@ const rest = allTalks.filter(t => !t.data.featured);
             <div class="talk-tags">
               {talk.data.youtubeId && <span class="pill pill-teal">Video</span>}
               {talk.data.slidesUrl && <span class="pill pill-coral">Slides</span>}
+              {!talk.data.youtubeId && !talk.data.slidesUrl && <span class="pill" style="background: var(--neutral-200); color: var(--neutral-600);">Notes</span>}
             </div>
           </a>
         ))}

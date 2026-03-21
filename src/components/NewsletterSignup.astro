@@ -13,42 +13,9 @@ const { variant = 'inline' } = Astro.props;
       Weekly essays on building AI products, leading engineering teams,
       and the messy path from frontend to AI leadership.
     </p>
-    <form class="newsletter-form" id="newsletter-form">
-      <label for="newsletter-email" class="sr-only">Email address</label>
-      <input
-        type="email"
-        id="newsletter-email"
-        name="email"
-        placeholder="your@email.com"
-        required
-        autocomplete="email"
-        class="newsletter-input"
-        aria-describedby="newsletter-note"
-      />
-      <button type="submit" class="btn-primary btn" id="newsletter-btn">Subscribe</button>
-    </form>
-    <p class="newsletter-note meta" id="newsletter-note">
-      Join 840+ engineering leaders &middot; No spam &middot; Unsubscribe anytime
-    </p>
+    <p class="newsletter-coming-soon">Newsletter launching soon.</p>
   </div>
 </section>
-
-<script>
-  document.querySelectorAll('#newsletter-form').forEach(form => {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('#newsletter-btn');
-      if (btn) {
-        btn.textContent = 'Coming soon!';
-        btn.setAttribute('disabled', 'true');
-        setTimeout(() => {
-          btn.textContent = 'Subscribe';
-          btn.removeAttribute('disabled');
-        }, 3000);
-      }
-    });
-  });
-</script>
 
 <style>
   .newsletter {
@@ -71,38 +38,16 @@ const { variant = 'inline' } = Astro.props;
     margin: 8px 0;
   }
   .newsletter-desc {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     max-width: 440px;
   }
   .newsletter.full .newsletter-desc {
     margin-left: auto;
     margin-right: auto;
   }
-  .newsletter-form {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .newsletter.full .newsletter-form {
-    justify-content: center;
-  }
-  .newsletter-input {
-    flex: 1;
-    max-width: 280px;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
-    color: var(--text-primary);
-    font-size: 14px;
-    font-family: var(--font-sans);
-  }
-  .newsletter-input:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: -1px;
-    border-color: var(--accent);
-  }
-  .newsletter-note {
-    font-size: 12px;
+  .newsletter-coming-soon {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
   }
 </style>

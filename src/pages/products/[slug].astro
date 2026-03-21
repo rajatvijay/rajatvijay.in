@@ -37,11 +37,11 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
 
     {data.status === 'coming-soon' ? (
       <span class="btn cta-btn disabled" aria-disabled="true">Coming soon</span>
-    ) : (
+    ) : data.url ? (
       <a href={data.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary cta-btn">
         {ctaLabel}
       </a>
-    )}
+    ) : null}
 
     <hr class="divider" />
 

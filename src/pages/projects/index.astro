@@ -12,19 +12,23 @@ const allProjects = await getCollection('projects');
       Open source work and case studies from building AI products at enterprise scale.
     </p>
 
-    <div class="items-grid">
-      {allProjects.map(project => (
-        <a href={`/projects/${project.id}`} class="item-card surface-card">
-          <h2 class="item-title">{project.data.title}</h2>
-          <p class="item-desc">{project.data.subtitle}</p>
-          <div class="item-tags">
-            {project.data.techStack.map(tech => (
-              <span class="tech-pill">{tech}</span>
-            ))}
-          </div>
-        </a>
-      ))}
-    </div>
+    {allProjects.length > 0 ? (
+      <div class="items-grid">
+        {allProjects.map(project => (
+          <a href={`/projects/${project.id}`} class="item-card surface-card">
+            <h2 class="item-title">{project.data.title}</h2>
+            <p class="item-desc">{project.data.subtitle}</p>
+            <div class="item-tags">
+              {project.data.techStack.map(tech => (
+                <span class="tech-pill">{tech}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="secondary-text">No projects yet. Check back soon.</p>
+    )}
   </div>
 </BaseLayout>
 

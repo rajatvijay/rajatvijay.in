@@ -74,6 +74,7 @@
   --code-bg: var(--teal-50);
   --code-text: var(--teal-800);     /* darkened from teal-600 for AAA */
   --focus-ring: var(--coral-400);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -102,6 +103,7 @@
   --code-bg: #04342C;
   --code-text: #9FE1CB;          /* lightened from #5DCAA5 for AAA 7:1 */
   --focus-ring: #F0997B;
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Grain texture for dark mode */
@@ -144,6 +146,15 @@ a {
 }
 a:hover {
   color: var(--teal-hover);
+}
+
+/* ═══════ Shiki dark mode — bridge .dark class with Astro's dual themes ═══════ */
+/* Astro generates code blocks with both light/dark styles via prefers-color-scheme.
+   Override so .dark class (from our toggle) controls which theme shows. */
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 
 /* ═══════ Focus — visible outlines for keyboard nav ═══════ */

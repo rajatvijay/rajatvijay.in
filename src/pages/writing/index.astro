@@ -40,9 +40,13 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
       ))}
     </ul>
 
-    <div class="reading-stats surface-card" style="text-align: center; margin-top: 40px;">
-      <p class="meta">You've discovered all {allPosts.length} posts</p>
-    </div>
+    {allPosts.length > 0 ? (
+      <div class="reading-stats surface-card" style="text-align: center; margin-top: 40px;">
+        <p class="meta">You've read through all {allPosts.length} posts</p>
+      </div>
+    ) : (
+      <p class="secondary-text" style="text-align: center; margin-top: 40px;">No posts yet. Check back soon.</p>
+    )}
   </div>
 </BaseLayout>
 

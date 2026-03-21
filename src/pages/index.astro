@@ -55,7 +55,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
     <MetricsStrip />
 
     <div class="home-grid">
-      <section class="latest-writing">
+      {allPosts.length > 0 && <section class="latest-writing">
         <span class="label">LATEST WRITING</span>
         <ul class="post-list">
           {allPosts.slice(0, 4).map(post => (
@@ -68,7 +68,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           ))}
         </ul>
         <a href="/writing" class="section-link teal-text">All writing →</a>
-      </section>
+      </section>}
 
       <section class="activity-feed">
         <span class="label">ACTIVITY</span>
@@ -92,7 +92,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
       </section>
     </div>
 
-    <section class="featured-section">
+    {allProjects.length > 0 && <section class="featured-section">
       <span class="label">FEATURED PROJECTS</span>
       <div class="featured-grid">
         {allProjects.slice(0, 3).map(project => (
@@ -103,9 +103,9 @@ const levelClass = ['none', 'low', 'med', 'high'];
         ))}
       </div>
       <a href="/projects" class="section-link teal-text">All projects →</a>
-    </section>
+    </section>}
 
-    <section class="featured-section">
+    {featuredProducts.length > 0 && <section class="featured-section">
       <span class="label">FEATURED PRODUCTS</span>
       <div class="featured-grid">
         {featuredProducts.slice(0, 3).map(product => (
@@ -116,7 +116,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
         ))}
       </div>
       <a href="/products" class="section-link teal-text">All products →</a>
-    </section>
+    </section>}
 
     {currentlyReading.length > 0 && (
       <section class="featured-section">

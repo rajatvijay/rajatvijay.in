@@ -51,7 +51,7 @@ const products = defineCollection({
     tagline: z.string(),
     description: z.string(),
     type: z.enum(['web', 'mobile', 'oss', 'template', 'download']),
-    url: z.string().url(),
+    url: z.union([z.string().url(), z.literal('')]).default(''),
     featured: z.boolean().default(false),
     status: z.enum(['live', 'beta', 'coming-soon']).default('live'),
   }),

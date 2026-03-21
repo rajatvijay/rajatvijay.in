@@ -51,10 +51,20 @@ const currentPath = Astro.url.pathname;
 
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const nav = document.querySelector('.nav-links');
+  function closeMenu() {
+    nav?.classList.remove('open');
+    mobileBtn?.setAttribute('aria-expanded', 'false');
+  }
   mobileBtn?.addEventListener('click', () => {
     nav?.classList.toggle('open');
     const isOpen = nav?.classList.contains('open');
-    mobileBtn.setAttribute('aria-expanded', String(isOpen));
+    mobileBtn?.setAttribute('aria-expanded', String(isOpen));
+  });
+  nav?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
   });
 </script>
 
@@ -126,7 +136,8 @@ const currentPath = Astro.url.pathname;
       top: 60px;
       left: 0;
       right: 0;
-      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
       flex-direction: column;
       padding: 16px 24px;

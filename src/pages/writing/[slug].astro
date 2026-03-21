@@ -19,6 +19,7 @@ const { Content } = await render(post);
 const allPosts = await getSortedPosts();
 const currentIndex = allPosts.findIndex(p => p.id === post.id);
 const nextPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev';
 ---
 
@@ -59,11 +60,20 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
       <button class="copy-link teal-text" id="copy-link">Copy link</button>
     </div>
 
-    {nextPost && (
-      <a href={`/writing/${nextPost.id}`} class="next-post">
-        <span class="meta">Older: {nextPost.data.title} →</span>
-      </a>
-    )}
+    <nav class="post-nav">
+      {nextPost ? (
+        <a href={`/writing/${nextPost.id}`} class="post-nav-link prev">
+          <span class="meta">← Older</span>
+          <span class="post-nav-title">{nextPost.data.title}</span>
+        </a>
+      ) : <div />}
+      {prevPost ? (
+        <a href={`/writing/${prevPost.id}`} class="post-nav-link next">
+          <span class="meta">Newer →</span>
+          <span class="post-nav-title">{prevPost.data.title}</span>
+        </a>
+      ) : <div />}
+    </nav>
 
     <DetailCTA />
   </article>
@@ -137,12 +147,25 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
     color: var(--teal);
   }
   .copy-link:hover { color: var(--teal-hover); }
-  .next-post {
-    display: block;
-    text-align: right;
-    padding: 16px 0;
-    color: var(--text-secondary);
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    gap: 16px;
   }
-  .next-post:hover { color: var(--text-primary); }
+  .post-nav-link {
+    color: var(--text-secondary);
+    max-width: 45%;
+  }
+  .post-nav-link:hover { color: var(--text-primary); }
+  .post-nav-link.next { text-align: right; }
+  .post-nav-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 2px;
+    color: var(--text-primary);
+  }
 </style>

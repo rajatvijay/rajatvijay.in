@@ -20,22 +20,26 @@ const typeLabels: Record<string, string> = {
       Things I've built that you can use — apps, tools, and hosted services.
     </p>
 
-    <div class="items-grid">
-      {allProducts.map(product => (
-        <a href={`/products/${product.id}`} class="item-card surface-card">
-          <div class="item-top">
-            <h2 class="item-title">{product.data.title}</h2>
-            {product.data.status !== 'live' && (
-              <span class:list={['status-badge', product.data.status]}>
-                {product.data.status === 'beta' ? 'Beta' : 'Coming soon'}
-              </span>
-            )}
-          </div>
-          <p class="item-desc">{product.data.tagline}</p>
-          <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
-        </a>
-      ))}
-    </div>
+    {allProducts.length > 0 ? (
+      <div class="items-grid">
+        {allProducts.map(product => (
+          <a href={`/products/${product.id}`} class="item-card surface-card">
+            <div class="item-top">
+              <h2 class="item-title">{product.data.title}</h2>
+              {product.data.status !== 'live' && (
+                <span class:list={['status-badge', product.data.status]}>
+                  {product.data.status === 'beta' ? 'Beta' : 'Coming soon'}
+                </span>
+              )}
+            </div>
+            <p class="item-desc">{product.data.tagline}</p>
+            <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="secondary-text">No products yet. Check back soon.</p>
+    )}
   </div>
 </BaseLayout>
 

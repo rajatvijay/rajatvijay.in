@@ -154,11 +154,7 @@ function fallbackData(): GitHubData {
 
   return {
     contributions: { totalContributions: 0, weeks },
-    recentCommits: [
-      { repo: 'collaborative-plan-tool', message: 'Prepare for open source release', rawDate: '2026-03-19T00:00:00Z', date: '2d ago' },
-      { repo: 'mind', message: 'Add iOS Shortcut import link', rawDate: '2026-03-14T00:00:00Z', date: '7d ago' },
-      { repo: 'chat-notes', message: 'Update service worker cache', rawDate: '2026-02-20T00:00:00Z', date: '1mo ago' },
-    ],
+    recentCommits: [],
     fetchedAt: new Date().toISOString(),
   };
 }
