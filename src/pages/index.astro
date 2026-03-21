@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TheArc from '../components/TheArc.astro';
 import MetricsStrip from '../components/MetricsStrip.astro';
-import BuildingInPublic from '../components/BuildingInPublic.astro';
 import { getCollection } from 'astro:content';
 import { getSortedPosts } from '../utils/posts';
 import { formatDateShort } from '../utils/formatDate';
@@ -47,7 +46,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           </a>
         </div>
       </div>
-      <img src="/rajat.jpg" alt="Rajat Vijay" class="avatar" width="140" height="140" />
+      <img src="/rajat.jpg" alt="Rajat Vijay" class="avatar" width="200" height="200" />
     </div>
   </section>
 
@@ -68,6 +67,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
             </li>
           ))}
         </ul>
+        <a href="/writing" class="section-link teal-text">All writing →</a>
       </section>
 
       <section class="activity-feed">
@@ -92,48 +92,47 @@ const levelClass = ['none', 'low', 'med', 'high'];
       </section>
     </div>
 
-    <BuildingInPublic commits={github.recentCommits} fetchedAt={github.fetchedAt} />
-
-    <section class="selected-projects">
-      <span class="label">SELECTED PROJECTS</span>
-      <div class="project-cards">
-        {allProjects.map(project => (
-          <a href={`/projects/${project.id}`} class="project-card surface-card">
-            <div class="project-color" style={`background: ${project.data.color}`}></div>
+    <section class="featured-section">
+      <span class="label">FEATURED PROJECTS</span>
+      <div class="featured-grid">
+        {allProjects.slice(0, 3).map(project => (
+          <a href={`/projects/${project.id}`} class="featured-card surface-card">
             <h3>{project.data.title}</h3>
             <p class="meta">{project.data.subtitle}</p>
           </a>
         ))}
       </div>
+      <a href="/projects" class="section-link teal-text">All projects →</a>
     </section>
 
-    <section class="selected-products">
-      <span class="label">PRODUCTS</span>
-      <div class="product-cards">
-        {featuredProducts.map(product => (
-          <a href={`/products/${product.id}`} class="product-card surface-card">
+    <section class="featured-section">
+      <span class="label">FEATURED PRODUCTS</span>
+      <div class="featured-grid">
+        {featuredProducts.slice(0, 3).map(product => (
+          <a href={`/products/${product.id}`} class="featured-card surface-card">
             <h3>{product.data.title}</h3>
             <p class="meta">{product.data.tagline}</p>
           </a>
         ))}
       </div>
+      <a href="/products" class="section-link teal-text">All products →</a>
     </section>
 
     {currentlyReading.length > 0 && (
-      <section class="currently-reading">
-        <span class="label">CURRENTLY READING</span>
-        <div class="reading-cards">
-          {currentlyReading.map(book => (
-            <div class="reading-card surface-card">
+      <section class="featured-section">
+        <span class="label">FEATURED READING</span>
+        <div class="featured-grid">
+          {currentlyReading.slice(0, 3).map(book => (
+            <div class="featured-card surface-card reading-card-home">
               <div class="reading-spine" style={`background: ${book.color}`}></div>
               <div>
-                <h3 class="reading-title">{book.title}</h3>
+                <h3>{book.title}</h3>
                 <p class="meta">{book.author}</p>
               </div>
             </div>
           ))}
         </div>
-        <a href="/reading" class="teal-text reading-link">See all books →</a>
+        <a href="/reading" class="section-link teal-text">All reading →</a>
       </section>
     )}
   </div>
@@ -151,8 +150,8 @@ const levelClass = ['none', 'low', 'med', 'high'];
   }
   .hero-text { flex: 1; }
   .avatar {
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
@@ -281,83 +280,38 @@ const levelClass = ['none', 'low', 'med', 'high'];
     font-weight: 500;
     color: var(--accent-text);
   }
-  .selected-projects {
+  .featured-section {
     margin: 40px 0;
   }
-  .selected-projects .label {
+  .featured-section .label {
     display: block;
     margin-bottom: 16px;
   }
-  .project-cards {
+  .featured-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
-  .project-card {
+  .featured-card {
     color: var(--text-primary);
     display: block;
     transition: transform 0.2s, box-shadow 0.2s;
   }
-  .project-card:hover {
+  .featured-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     color: var(--text-primary);
   }
-  .project-color {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-  }
-  .project-card h3 {
+  .featured-card h3 {
     font-size: 15px;
     font-weight: 500;
     margin-bottom: 4px;
   }
-  .selected-products {
-    margin: 40px 0;
-  }
-  .selected-products .label {
-    display: block;
-    margin-bottom: 16px;
-  }
-  .product-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .product-card {
-    color: var(--text-primary);
-    display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .product-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    color: var(--text-primary);
-  }
-  .product-card h3 {
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
-  .currently-reading {
-    margin: 40px 0;
-  }
-  .currently-reading .label {
-    display: block;
-    margin-bottom: 16px;
-  }
-  .reading-cards {
-    display: flex;
-    gap: 12px;
-  }
-  .reading-card {
+  .reading-card-home {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 16px;
-    flex: 1;
   }
   .reading-spine {
     width: 4px;
@@ -365,12 +319,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
     border-radius: 2px;
     flex-shrink: 0;
   }
-  .reading-title {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 2px;
-  }
-  .reading-link {
+  .section-link {
     display: block;
     margin-top: 12px;
     font-size: 14px;
@@ -379,13 +328,11 @@ const levelClass = ['none', 'low', 'med', 'high'];
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 24px; }
     .hero-intro { flex-direction: column-reverse; align-items: center; text-align: center; gap: 24px; }
-    .avatar { width: 100px; height: 100px; }
+    .avatar { width: 120px; height: 120px; }
     .hero-ctas { justify-content: center; }
     .social-bar { justify-content: center; }
     .home-grid { grid-template-columns: 1fr; }
-    .project-cards { grid-template-columns: 1fr; }
-    .product-cards { grid-template-columns: 1fr; }
-    .reading-cards { flex-direction: column; }
+    .featured-grid { grid-template-columns: 1fr; }
     .hero-ctas { flex-direction: column; }
   }
 </style>

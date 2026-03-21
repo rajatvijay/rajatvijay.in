@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import DetailCTA from '../../components/DetailCTA.astro';
 import { render } from 'astro:content';
 import { getSortedPosts } from '../../utils/posts';
 import { formatDateLong } from '../../utils/formatDate';
@@ -64,7 +65,7 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
       </a>
     )}
 
-    <NewsletterSignup variant="inline" />
+    <DetailCTA />
   </article>
 </BaseLayout>
 

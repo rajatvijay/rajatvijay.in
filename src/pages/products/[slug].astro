@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import DetailCTA from '../../components/DetailCTA.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -47,6 +48,8 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
     <div class="prose">
       <Content />
     </div>
+
+    <DetailCTA />
   </div>
 </BaseLayout>
 

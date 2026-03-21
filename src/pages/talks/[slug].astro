@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import DetailCTA from '../../components/DetailCTA.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -91,6 +92,8 @@ const prevTalk = currentIndex > 0 ? allTalks[currentIndex - 1] : undefined;
         </a>
       ) : <div />}
     </nav>
+
+    <DetailCTA />
   </div>
 </BaseLayout>
 
