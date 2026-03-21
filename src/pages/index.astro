@@ -47,7 +47,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           </a>
         </div>
       </div>
-      <div class="avatar-placeholder"></div>
+      <img src="/rajat.jpg" alt="Rajat Vijay" class="avatar" width="140" height="140" />
     </div>
   </section>
 
@@ -150,11 +150,11 @@ const levelClass = ['none', 'low', 'med', 'high'];
     gap: 40px;
   }
   .hero-text { flex: 1; }
-  .avatar-placeholder {
+  .avatar {
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    background: var(--border);
+    object-fit: cover;
     flex-shrink: 0;
   }
   .hero-title {
@@ -379,7 +379,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 24px; }
     .hero-intro { flex-direction: column-reverse; align-items: center; text-align: center; gap: 24px; }
-    .avatar-placeholder { width: 100px; height: 100px; }
+    .avatar { width: 100px; height: 100px; }
     .hero-ctas { justify-content: center; }
     .social-bar { justify-content: center; }
     .home-grid { grid-template-columns: 1fr; }
