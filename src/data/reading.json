@@ -1,30 +1,38 @@
 [
   {
     "title": "Thinking in Systems",
-    "author": "D. Meadows",
+    "author": "Donella H. Meadows",
     "status": "Reading",
     "color": "#1D9E75",
-    "quickTake": "Changed how I think about org design"
-  },
-  {
-    "title": "Staff Engineer",
-    "author": "W. Larson",
-    "status": "Finished",
-    "color": "#D85A30",
-    "quickTake": "Essential for the IC→leadership transition"
+    "quickTake": "Changed how I think about org design",
+    "cover": "https://m.media-amazon.com/images/I/51hqXnXFMkL._SY445_SX342_.jpg",
+    "order": 1
   },
   {
     "title": "Designing Data Apps",
-    "author": "B. Wilke",
+    "author": "Brian Wilke",
     "status": "Reading",
     "color": "#6B6860",
-    "quickTake": "Shaping our analytics product thinking"
+    "quickTake": "Shaping our analytics product thinking",
+    "cover": "https://m.media-amazon.com/images/I/41VjBFlagTL._SY445_SX342_.jpg",
+    "order": 2
+  },
+  {
+    "title": "Staff Engineer",
+    "author": "Will Larson",
+    "status": "Finished",
+    "color": "#D85A30",
+    "quickTake": "Essential for the IC→leadership transition",
+    "cover": "https://m.media-amazon.com/images/I/41fsfMalqVL._SY445_SX342_.jpg",
+    "order": 3
   },
   {
     "title": "The Art of Action",
-    "author": "S. Bungay",
+    "author": "Stephen Bungay",
     "status": "Finished",
     "color": "#993C1D",
-    "quickTake": "Strategy execution for engineering orgs"
+    "quickTake": "Strategy execution for engineering orgs",
+    "cover": "https://m.media-amazon.com/images/I/41kB0GZ-0CL._SY445_SX342_.jpg",
+    "order": 4
   }
 ]

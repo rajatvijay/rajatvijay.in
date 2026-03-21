@@ -5,22 +5,19 @@ import { getCollection } from 'astro:content';
 const allProjects = await getCollection('projects');
 ---
 
-<BaseLayout title="Projects — Rajat" description="Selected projects and case studies from building AI products at enterprise scale.">
+<BaseLayout title="Projects — Rajat" description="Open source projects and case studies from building AI products at enterprise scale.">
   <div class="container" style="padding-top: 48px;">
     <h1>Projects</h1>
     <p class="secondary-text" style="margin: 8px 0 40px;">
-      Selected projects and case studies from building AI products at enterprise scale.
+      Open source work and case studies from building AI products at enterprise scale.
     </p>
 
-    <div class="projects-grid">
+    <div class="items-grid">
       {allProjects.map(project => (
-        <a href={`/projects/${project.id}`} class="project-item surface-card">
-          <div class="project-icon" style={`background: ${project.data.color}`}></div>
-          <div>
-            <h2 style="font-size: 20px; margin-bottom: 4px;">{project.data.title}</h2>
-            <p class="meta">{project.data.subtitle}</p>
-          </div>
-          <div class="project-tech">
+        <a href={`/projects/${project.id}`} class="item-card surface-card">
+          <h2 class="item-title">{project.data.title}</h2>
+          <p class="item-desc">{project.data.subtitle}</p>
+          <div class="item-tags">
             {project.data.techStack.map(tech => (
               <span class="tech-pill">{tech}</span>
             ))}
@@ -32,31 +29,42 @@ const allProjects = await getCollection('projects');
 </BaseLayout>
 
 <style>
-  .projects-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
-  .project-item {
+  .item-card {
     display: block;
     color: var(--text-primary);
     transition: transform 0.2s, box-shadow 0.2s;
   }
-  .project-item:hover {
+  .item-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     color: var(--text-primary);
   }
-  .project-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    margin-bottom: 16px;
+  .item-card:hover .item-title {
+    color: var(--accent-text);
   }
-  .project-tech {
-    margin-top: 12px;
+  .item-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    transition: color 0.2s;
+  }
+  .item-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .item-tags {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
+  }
+  @media (max-width: 768px) {
+    .items-grid { grid-template-columns: 1fr; }
   }
 </style>

@@ -17,21 +17,21 @@ const typeLabels: Record<string, string> = {
   <div class="container" style="padding-top: 48px;">
     <h1>Products</h1>
     <p class="secondary-text" style="margin: 8px 0 40px;">
-      Things I've built that you can use — apps, tools, templates, and open source projects.
+      Things I've built that you can use — apps, tools, and hosted services.
     </p>
 
-    <div class="products-grid">
+    <div class="items-grid">
       {allProducts.map(product => (
-        <a href={`/products/${product.id}`} class:list={['product-card', 'surface-card', { featured: product.data.featured }]}>
-          <div class="product-top">
-            <h2 class="product-title">{product.data.title}</h2>
+        <a href={`/products/${product.id}`} class="item-card surface-card">
+          <div class="item-top">
+            <h2 class="item-title">{product.data.title}</h2>
             {product.data.status !== 'live' && (
               <span class:list={['status-badge', product.data.status]}>
                 {product.data.status === 'beta' ? 'Beta' : 'Coming soon'}
               </span>
             )}
           </div>
-          <p class="product-tagline">{product.data.tagline}</p>
+          <p class="item-desc">{product.data.tagline}</p>
           <span class="pill pill-teal">{typeLabels[product.data.type]}</span>
         </a>
       ))}
@@ -40,47 +40,42 @@ const typeLabels: Record<string, string> = {
 </BaseLayout>
 
 <style>
-  .products-grid {
+  .items-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
-  .product-card {
+  .item-card {
     display: block;
     color: var(--text-primary);
     transition: transform 0.2s, box-shadow 0.2s;
   }
-  .product-card:hover {
+  .item-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     color: var(--text-primary);
   }
-  .product-card.featured {
-    border-left: 3px solid var(--accent);
+  .item-card:hover .item-title {
+    color: var(--accent-text);
   }
-  .product-top {
+  .item-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 8px;
-  }
-  .product-title {
-    font-size: 18px;
-    font-weight: 500;
     margin-bottom: 4px;
   }
-  .product-card:hover .product-title {
-    color: var(--accent-text);
+  .item-title {
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.2s;
   }
-  .product-tagline {
+  .item-desc {
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 12px;
   }
   @media (max-width: 768px) {
-    .products-grid {
-      grid-template-columns: 1fr;
-    }
+    .items-grid { grid-template-columns: 1fr; }
   }
 </style>
