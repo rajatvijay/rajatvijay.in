@@ -44,42 +44,10 @@ const typeLabels: Record<string, string> = {
 </BaseLayout>
 
 <style>
-  .items-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .item-card {
-    display: block;
-    color: var(--text-primary);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .item-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    color: var(--text-primary);
-  }
-  .item-card:hover .item-title {
-    color: var(--accent-text);
-  }
   .item-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 4px;
-  }
-  .item-title {
-    font-size: 18px;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  .item-desc {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 12px;
-  }
-  @media (max-width: 768px) {
-    .items-grid { grid-template-columns: 1fr; }
   }
 </style>

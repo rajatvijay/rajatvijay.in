@@ -14,9 +14,9 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
       Essays on building AI products, leading engineering teams, and the path from frontend to AI leadership.
     </p>
 
-    <div class="tags-row">
+    <div class="tags-row" role="list" aria-label="Filter by tag">
       {allTags.map(tag => (
-        <span class="pill pill-coral">{tag}</span>
+        <a href={`/writing/tag/${tag}`} class="pill pill-coral" role="listitem">{tag}</a>
       ))}
     </div>
 
@@ -32,7 +32,7 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
             <p class="writing-desc secondary-text">{post.data.description}</p>
             <div class="writing-tags">
               {post.data.tags.map(tag => (
-                <span class="pill pill-teal" style="font-size: 12px; padding: 2px 8px;">{tag}</span>
+                <a href={`/writing/tag/${tag}`} class="pill pill-teal" style="font-size: 12px; padding: 2px 8px;" onclick="event.stopPropagation();">{tag}</a>
               ))}
             </div>
           </a>

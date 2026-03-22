@@ -8,6 +8,9 @@ const rest = allTalks.filter(t => !t.data.featured);
 ---
 
 <BaseLayout title="Speaking & Talks — Rajat" description="Conference talks, podcast appearances, and internal presentations.">
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+  </Fragment>
   <div class="container" style="padding-top: 48px;">
     <h1>Speaking & Talks</h1>
     <p class="secondary-text" style="margin: 8px 0 40px;">
