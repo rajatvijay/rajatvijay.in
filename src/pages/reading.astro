@@ -97,15 +97,15 @@ const books = readingData
   }
   .book-status.finished {
     background: var(--neutral-200);
-    color: var(--neutral-600);
+    color: var(--neutral-800);  /* AAA: #3D3B36 on #E8E6E1 = 8.97:1 */
   }
   :global(.dark) .book-status.reading {
     background: var(--teal-900);
-    color: var(--teal-200);
+    color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
   }
   :global(.dark) .book-status.finished {
     background: var(--neutral-800);
-    color: var(--neutral-400);
+    color: #D5D3CD;             /* AAA: 7.47:1 on #3D3B36 */
   }
   .book-take {
     font-size: 14px;

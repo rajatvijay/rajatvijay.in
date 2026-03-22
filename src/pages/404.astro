@@ -49,12 +49,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .terminal {
     margin-top: 32px;
-    opacity: 0.5;
   }
   .terminal code {
     background: none;
     font-size: 13px;
-    color: var(--text-muted);
+    color: var(--text-muted);  /* AAA-safe with updated --text-muted values */
   }
   @media (max-width: 768px) {
     .four-number { font-size: 80px; }

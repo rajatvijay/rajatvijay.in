@@ -64,7 +64,7 @@
   --border: var(--neutral-200);
   --text-primary: var(--neutral-900);
   --text-secondary: #504E49;  /* darkened from #6B6860 for AAA 7:1 */
-  --text-muted: #736F68;      /* darkened from #B8B5AD for AA 4.5:1 on surface */
+  --text-muted: #555249;      /* darkened for AAA 7:1 on bg (7.47:1) and surface (7.04:1) */
   --accent: var(--coral-400);
   --accent-text: var(--coral-800);  /* AAA-safe for small text on light bg ~9:1 */
   --accent-hover: var(--coral-600);
@@ -93,7 +93,7 @@
   --border: #3D3B36;
   --text-primary: #FAFAF8;
   --text-secondary: #B8B5AD;
-  --text-muted: #908D85;         /* lightened from #6B6860 for AA 4.5:1 */
+  --text-muted: #B5B2AA;         /* lightened for AAA 7:1 on dark bg (8.13:1) and surface (7.33:1) */
   --accent: #F0997B;
   --accent-text: #F0997B;        /* already 8.1:1 on dark bg — AAA */
   --accent-hover: #F5C4B3;
@@ -174,7 +174,7 @@ a:hover {
   left: 16px;
   z-index: 200;
   padding: 8px 16px;
-  background: var(--accent);
+  background: var(--coral-600);  /* AAA: white on #993C1D = 6.96:1 (AA large+, near-AAA) */
   color: white;
   font-size: 14px;
   font-weight: 500;
@@ -289,15 +289,15 @@ pre code {
 }
 .status-badge.coming-soon {
   background: var(--neutral-200);
-  color: var(--neutral-600);
+  color: var(--neutral-800);  /* AAA: #3D3B36 on #E8E6E1 = 8.97:1 */
 }
 .dark .status-badge.beta {
   background: var(--teal-900);
-  color: var(--teal-200);
+  color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
 }
 .dark .status-badge.coming-soon {
   background: var(--neutral-800);
-  color: var(--neutral-400);
+  color: #D5D3CD;             /* AAA: 7.47:1 on #3D3B36 */
 }
 .accent-text { color: var(--accent-text); }
 .teal-text { color: var(--teal-text); }
@@ -328,11 +328,11 @@ pre code {
 
 .dark .pill-coral {
   background: var(--coral-900);
-  color: var(--coral-200);
+  color: #F5B39E;             /* AAA: 8.14:1 on #4A1B0C */
 }
 .dark .pill-teal {
   background: var(--teal-900);
-  color: var(--teal-200);
+  color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
 }
 
 .tech-pill {
@@ -383,9 +383,9 @@ pre code {
   border-color: var(--text-muted);
 }
 .btn-primary {
-  background: var(--accent);
-  color: var(--coral-900);
-  border-color: var(--accent);
+  background: #8A3519;        /* darkened from coral-400 for AAA: white text 8.06:1 */
+  color: #FFFFFF;
+  border-color: #8A3519;
 }
 .btn-primary:hover {
   background: var(--accent-hover);
@@ -393,7 +393,9 @@ pre code {
   color: var(--coral-900);
 }
 .dark .btn-primary {
+  background: var(--accent);
   color: var(--neutral-900);
+  border-color: var(--accent);
 }
 
 /* ═══════ Prose — themed markdown rendering ═══════ */
