@@ -106,15 +106,15 @@
   --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Grain texture for dark mode */
+/* Grain texture for dark mode — static PNG tile instead of SVG feTurbulence */
 .dark body::after {
   content: '';
   position: fixed;
   inset: 0;
-  opacity: 0.035;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background: url('/noise.png') repeat;
   pointer-events: none;
   z-index: 9999;
+  transform: translateZ(0);
 }
 
 /* ═══════ Reset & base ═══════ */
@@ -136,7 +136,6 @@ body {
   line-height: 1.7;
   color: var(--text-primary);
   background-color: var(--bg);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
