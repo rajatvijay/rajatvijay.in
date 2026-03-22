@@ -18,6 +18,30 @@ const levelClass = ['none', 'low', 'med', 'high'];
 ---
 
 <BaseLayout title="Rajat — Director of Engineering & AI">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "Rajat",
+          "url": "https://rajat.dev"
+        },
+        {
+          "@type": "Person",
+          "name": "Rajat Vijay",
+          "url": "https://rajat.dev",
+          "jobTitle": "Director of Engineering & AI",
+          "worksFor": { "@type": "Organization", "name": "Certa" },
+          "sameAs": [
+            "https://twitter.com/rajatvijay",
+            "https://github.com/rajatvijay",
+            "https://www.linkedin.com/in/rajat-vijay/"
+          ]
+        }
+      ]
+    })} />
+  </Fragment>
   <section class="hero container">
     <div class="hero-intro">
       <div class="hero-text">

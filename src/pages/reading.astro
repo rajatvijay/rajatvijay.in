@@ -23,7 +23,7 @@ const books = readingData
         <div class="book-row surface-card">
           <div class="book-cover">
             {book.cover ? (
-              <img src={book.cover} alt={`Cover of ${book.title}`} loading="lazy" />
+              <img src={book.cover} alt={`Cover of ${book.title}`} loading="lazy" width="64" height="96" />
             ) : (
               <div class="cover-placeholder" style={`background: ${book.color}`}></div>
             )}
