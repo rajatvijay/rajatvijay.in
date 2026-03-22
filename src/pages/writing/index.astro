@@ -30,12 +30,12 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
             </div>
             <h2 class="writing-title">{post.data.title}</h2>
             <p class="writing-desc secondary-text">{post.data.description}</p>
-            <div class="writing-tags">
-              {post.data.tags.map(tag => (
-                <a href={`/writing/tag/${tag}`} class="pill pill-teal" style="font-size: 12px; padding: 2px 8px;" onclick="event.stopPropagation();">{tag}</a>
-              ))}
-            </div>
           </a>
+          <div class="writing-tags">
+            {post.data.tags.map(tag => (
+              <a href={`/writing/tag/${tag}`} class="pill pill-teal" style="font-size: 12px; padding: 2px 8px;">{tag}</a>
+            ))}
+          </div>
         </li>
       ))}
     </ul>
@@ -68,7 +68,7 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
   }
   .writing-link {
     display: block;
-    padding: 24px 0;
+    padding: 24px 0 8px;
     color: var(--text-primary);
   }
   .writing-link:hover { color: var(--text-primary); }
@@ -92,5 +92,6 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
   .writing-tags {
     display: flex;
     gap: 6px;
+    padding-bottom: 24px;
   }
 </style>
