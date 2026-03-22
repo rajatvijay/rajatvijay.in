@@ -401,7 +401,7 @@ pre code {
 /* ═══════ Prose — themed markdown rendering ═══════ */
 .prose {
   line-height: 1.7;
-  max-width: 720px;
+  max-width: 65ch;  /* WCAG 1.4.8: ≤80 characters per line */
 }
 .prose h2 {
   font-size: 11px;
@@ -512,4 +512,14 @@ pre code {
   .hero-title { font-size: 24px; }
   h1 { font-size: 20px; }
   body { font-size: 15px; }
+}
+
+/* ═══════ Reduced motion ═══════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
