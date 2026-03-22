@@ -52,21 +52,30 @@ async function fetchGitHub(query: string) {
     return null;
   }
 
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      Authorization: `bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query }),
-  });
+  try {
+    const res = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
 
-  if (!res.ok) {
-    console.warn(`[github] API returned ${res.status}, using fallback data`);
+    if (!res.ok) {
+      console.warn(`[github] API returned ${res.status}, using fallback data`);
+      return null;
+    }
+
+    const data = await res.json();
+    if (data?.errors) {
+      console.warn('[github] GraphQL errors:', data.errors);
+    }
+    return data;
+  } catch (err) {
+    console.warn('[github] Fetch failed, using fallback data:', err);
     return null;
   }
-
-  return await res.json();
 }
 
 export async function getGitHubData(): Promise<GitHubData> {

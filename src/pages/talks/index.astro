@@ -25,6 +25,7 @@ const rest = allTalks.filter(t => !t.data.featured);
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
                 loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-presentation"
               ></iframe>
             ) : (
               <div class="thumb-placeholder"></div>
