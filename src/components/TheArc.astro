@@ -61,9 +61,19 @@
   .arc-dot.now {
     background: var(--accent);
     box-shadow: 0 0 0 3px var(--coral-50);
+    animation: pulse-now 2.5s ease-in-out infinite;
   }
   :global(.dark) .arc-dot.now {
     box-shadow: 0 0 0 3px var(--coral-900);
+    animation-name: pulse-now-dark;
+  }
+  @keyframes pulse-now {
+    0%, 100% { box-shadow: 0 0 0 3px var(--coral-50); }
+    50% { box-shadow: 0 0 0 6px var(--coral-50); }
+  }
+  @keyframes pulse-now-dark {
+    0%, 100% { box-shadow: 0 0 0 3px var(--coral-900); }
+    50% { box-shadow: 0 0 0 6px var(--coral-900); }
   }
   .arc-heading {
     font-size: 15px;

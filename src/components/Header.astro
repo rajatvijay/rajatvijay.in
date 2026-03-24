@@ -51,6 +51,8 @@ function isActive(href: string) {
     const isDark = document.documentElement.classList.contains('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     toggle.setAttribute('aria-checked', String(isDark));
+    toggle.classList.add('pop');
+    toggle.addEventListener('animationend', () => toggle.classList.remove('pop'), { once: true });
   });
 
   const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -113,6 +115,22 @@ function isActive(href: string) {
     color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.2s;
+    position: relative;
+    padding-bottom: 2px;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--text-primary);
+    transition: width 0.25s ease-out;
+  }
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
   }
   .nav-link:hover, .nav-link.active {
     color: var(--text-primary);
@@ -132,6 +150,14 @@ function isActive(href: string) {
     transition: color 0.2s;
   }
   .dark-toggle:hover { color: var(--text-primary); }
+  @keyframes toggle-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.75); }
+    100% { transform: scale(1); }
+  }
+  .dark-toggle.pop {
+    animation: toggle-pop 0.3s ease-out;
+  }
   :global(.dark) .icon-sun { display: inline; }
   :global(.dark) .icon-moon { display: none; }
   :global(:not(.dark)) .icon-sun { display: none; }
