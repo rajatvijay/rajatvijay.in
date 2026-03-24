@@ -66,6 +66,17 @@ const resolvedOgImage = ogImage || new URL('/og-default.png', Astro.site).toStri
       document.documentElement.classList.add('dark');
     }
   </script>
+
+  <!-- Easter egg for curious developers -->
+  <script is:inline>
+    console.log(
+      '%c rajat.dev ',
+      'background: #D85A30; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 14px;'
+    );
+    console.log(
+      "You're reading the source? Nice.\n\u2192 rajat.dev/writing\n\u2192 github.com/rajatvijay"
+    );
+  </script>
 </head>
 <body>
   <a href="#main-content" class="skip-to-content">Skip to content</a>

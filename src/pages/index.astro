@@ -94,7 +94,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
             </li>
           ))}
         </ul>
-        <a href="/writing" class="section-link teal-text">All writing →</a>
+        <a href="/writing" class="section-link teal-text">All writing <span class="arrow">&rarr;</span></a>
       </section>}
 
       <section class="activity-feed">
@@ -102,8 +102,8 @@ const levelClass = ['none', 'low', 'med', 'high'];
         <div class="github-widget surface-card">
           <p class="meta github-label">GitHub</p>
           <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
-            {github.contributions.weeks.map(week => (
-              <div class="contrib-col">
+            {github.contributions.weeks.map((week, i) => (
+              <div class="contrib-col" style={`--col: ${i}`}>
                 {week.levels.map(level => (
                   <div class={`contrib-cell ${levelClass[level]}`} />
                 ))}
@@ -114,7 +114,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
         <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
           <p class="topmate-heading">Got a question? Let's talk.</p>
           <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
-          <span class="topmate-cta">Book a 1:1 →</span>
+          <span class="topmate-cta">Book a 1:1 <span class="arrow">&rarr;</span></span>
         </a>
       </section>
     </div>
@@ -129,7 +129,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           </a>
         ))}
       </div>
-      <a href="/projects" class="section-link teal-text">All projects →</a>
+      <a href="/projects" class="section-link teal-text">All projects <span class="arrow">&rarr;</span></a>
     </section>}
 
     {featuredProducts.length > 0 && <section class="featured-section">
@@ -142,7 +142,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           </a>
         ))}
       </div>
-      <a href="/products" class="section-link teal-text">All products →</a>
+      <a href="/products" class="section-link teal-text">All products <span class="arrow">&rarr;</span></a>
     </section>}
 
     {currentlyReading.length > 0 && (
@@ -159,7 +159,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
             </div>
           ))}
         </div>
-        <a href="/reading" class="section-link teal-text">All reading →</a>
+        <a href="/reading" class="section-link teal-text">All reading <span class="arrow">&rarr;</span></a>
       </section>
     )}
   </div>
@@ -182,6 +182,11 @@ const levelClass = ['none', 'low', 'med', 'high'];
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .avatar:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
   .hero-title {
     margin: 8px 0 16px;
@@ -281,6 +286,17 @@ const levelClass = ['none', 'low', 'med', 'high'];
   :global(.dark) .contrib-cell.low { background: var(--teal-900); }
   :global(.dark) .contrib-cell.med { background: var(--teal-800); }
   :global(.dark) .contrib-cell.high { background: var(--teal-600); }
+  .contrib-stagger .contrib-col {
+    opacity: 0;
+  }
+  .contrib-stagger.revealed .contrib-col {
+    animation: contrib-fade 0.3s ease-out forwards;
+    animation-delay: calc(var(--col, 0) * 12ms);
+  }
+  @keyframes contrib-fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .topmate-card {
     display: block;
     padding: 20px;
@@ -309,6 +325,14 @@ const levelClass = ['none', 'low', 'med', 'high'];
     font-size: 14px;
     font-weight: 500;
     color: var(--accent-text);
+  }
+  .arrow {
+    display: inline-block;
+    transition: transform 0.2s ease-out;
+  }
+  .section-link:hover .arrow,
+  .topmate-card:hover .arrow {
+    transform: translateX(4px);
   }
   .featured-section {
     margin: 40px 0;
@@ -348,6 +372,11 @@ const levelClass = ['none', 'low', 'med', 'high'];
     height: 40px;
     border-radius: 2px;
     flex-shrink: 0;
+    transition: height 0.25s ease-out, filter 0.25s ease-out;
+  }
+  .reading-card-home:hover .reading-spine {
+    height: 52px;
+    filter: brightness(1.15);
   }
   .section-link {
     display: block;
@@ -365,3 +394,19 @@ const levelClass = ['none', 'low', 'med', 'high'];
     .featured-grid { grid-template-columns: 1fr; }
   }
 </style>
+
+<script>
+  const grid = document.querySelector('.contrib-grid');
+  if (grid) {
+    grid.classList.add('contrib-stagger');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          grid.classList.add('revealed');
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(grid);
+  }
+</script>

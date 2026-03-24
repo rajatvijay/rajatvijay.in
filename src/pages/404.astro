@@ -33,6 +33,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1;
     display: block;
     margin-bottom: 16px;
+    animation: gentle-float 4s ease-in-out infinite;
+  }
+  @keyframes gentle-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
   }
   h1 {
     margin-bottom: 8px;

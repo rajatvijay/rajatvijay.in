@@ -93,17 +93,45 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
         if (res.ok) {
           succeeded = true;
           const showSuccess = () => {
-            const successMsg = document.createElement('p');
-            successMsg.className = 'newsletter-success';
-            successMsg.textContent = 'Welcome aboard — check your inbox to confirm.';
-            successMsg.tabIndex = -1;
-            successMsg.style.opacity = '0';
-            successMsg.style.transition = 'opacity 0.3s ease-in';
-            form.replaceChildren(successMsg);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'newsletter-success';
+            wrapper.tabIndex = -1;
+
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('class', 'check-icon');
+            svg.setAttribute('width', '28');
+            svg.setAttribute('height', '28');
+            svg.setAttribute('viewBox', '0 0 24 24');
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', 'currentColor');
+            svg.setAttribute('stroke-width', '2');
+            svg.setAttribute('stroke-linecap', 'round');
+            svg.setAttribute('stroke-linejoin', 'round');
+            svg.setAttribute('aria-hidden', 'true');
+            const circle = document.createElementNS(svgNS, 'circle');
+            circle.setAttribute('cx', '12');
+            circle.setAttribute('cy', '12');
+            circle.setAttribute('r', '10');
+            circle.setAttribute('class', 'check-circle');
+            const path = document.createElementNS(svgNS, 'path');
+            path.setAttribute('d', 'M8 12l3 3 5-5');
+            path.setAttribute('class', 'check-path');
+            svg.appendChild(circle);
+            svg.appendChild(path);
+
+            const text = document.createElement('span');
+            text.textContent = 'Welcome aboard \u2014 check your inbox to confirm.';
+
+            wrapper.appendChild(svg);
+            wrapper.appendChild(text);
+            wrapper.style.opacity = '0';
+            wrapper.style.transition = 'opacity 0.3s ease-in';
+            form.replaceChildren(wrapper);
             form.style.opacity = '1';
             requestAnimationFrame(() => {
-              successMsg.style.opacity = '1';
-              successMsg.focus();
+              wrapper.style.opacity = '1';
+              wrapper.focus();
             });
           };
           form.style.transition = 'opacity 0.2s ease-out';
@@ -235,16 +263,42 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
   .newsletter-error {
     color: var(--error);
   }
-  .newsletter-success {
+  .newsletter-form :global(.newsletter-success) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 15px;
     color: var(--teal-text);
     font-weight: 500;
     padding: 8px 0;
   }
-  .newsletter-success:focus {
+  .newsletter.full .newsletter-form :global(.newsletter-success) {
+    justify-content: center;
+  }
+  .newsletter-form :global(.newsletter-success:focus) {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
     border-radius: 4px;
+  }
+  .newsletter-form :global(.check-icon) {
+    flex-shrink: 0;
+    color: var(--teal-text);
+  }
+  .newsletter-form :global(.check-circle) {
+    stroke-dasharray: 63;
+    stroke-dashoffset: 63;
+    animation: draw-circle 0.5s ease-out 0.1s forwards;
+  }
+  .newsletter-form :global(.check-path) {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: draw-check 0.3s ease-out 0.5s forwards;
+  }
+  @keyframes draw-circle {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes draw-check {
+    to { stroke-dashoffset: 0; }
   }
 
   @media (max-width: 480px) {
