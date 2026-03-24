@@ -81,43 +81,67 @@ const levelClass = ['none', 'low', 'med', 'high'];
     <TheArc />
     <MetricsStrip />
 
-    <div class="home-grid" data-reveal>
-      {allPosts.length > 0 && <section class="latest-writing">
-        <h2 class="label">LATEST WRITING</h2>
-        <ul class="post-list">
-          {allPosts.slice(0, 4).map(post => (
-            <li>
-              <a href={`/writing/${post.id}`} class="post-link">
-                <span class="post-title">{post.data.title}</span>
-                <span class="meta">{formatDateShort(post.data.date)} &middot; {post.data.readTime} min</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a href="/writing" class="section-link teal-text">All writing <span class="arrow">&rarr;</span></a>
-      </section>}
-
-      <section class="activity-feed">
-        <h2 class="label">ACTIVITY</h2>
-        <div class="github-widget surface-card">
-          <p class="meta github-label">GitHub</p>
-          <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
-            {github.contributions.weeks.map((week, i) => (
-              <div class="contrib-col" style={`--col: ${i}`}>
-                {week.levels.map(level => (
-                  <div class={`contrib-cell ${levelClass[level]}`} />
-                ))}
-              </div>
+    {allPosts.length > 0 ? (
+      <div class="home-grid" data-reveal>
+        <section class="latest-writing">
+          <h2 class="label">LATEST WRITING</h2>
+          <ul class="post-list">
+            {allPosts.slice(0, 4).map(post => (
+              <li>
+                <a href={`/writing/${post.id}`} class="post-link">
+                  <span class="post-title">{post.data.title}</span>
+                  <span class="meta">{formatDateShort(post.data.date)} &middot; {post.data.readTime} min</span>
+                </a>
+              </li>
             ))}
+          </ul>
+          <a href="/writing" class="section-link teal-text">All writing <span class="arrow">&rarr;</span></a>
+        </section>
+        <section class="activity-feed">
+          <h2 class="label">ACTIVITY</h2>
+          <div class="github-widget surface-card">
+            <p class="meta github-label">GitHub</p>
+            <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
+              {github.contributions.weeks.map((week, i) => (
+                <div class="contrib-col" style={`--col: ${i}`}>
+                  {week.levels.map(level => (
+                    <div class={`contrib-cell ${levelClass[level]}`} />
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
-          <p class="topmate-heading">Got a question? Let's talk.</p>
-          <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
-          <span class="topmate-cta">Book a 1:1 <span class="arrow">&rarr;</span></span>
-        </a>
-      </section>
-    </div>
+          <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
+            <p class="topmate-heading">Got a question? Let's talk.</p>
+            <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
+            <span class="topmate-cta">Book a 1:1 <span class="arrow">&rarr;</span></span>
+          </a>
+        </section>
+      </div>
+    ) : (
+      <div class="home-activity-solo" data-reveal>
+        <section class="activity-feed">
+          <h2 class="label">ACTIVITY</h2>
+          <div class="github-widget surface-card">
+            <p class="meta github-label">GitHub</p>
+            <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
+              {github.contributions.weeks.map((week, i) => (
+                <div class="contrib-col" style={`--col: ${i}`}>
+                  {week.levels.map(level => (
+                    <div class={`contrib-cell ${levelClass[level]}`} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+          <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
+            <p class="topmate-heading">Got a question? Let's talk.</p>
+            <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
+            <span class="topmate-cta">Book a 1:1 <span class="arrow">&rarr;</span></span>
+          </a>
+        </section>
+      </div>
+    )}
 
     {allProjects.length > 0 && <section class="featured-section" data-reveal>
       <h2 class="label">FEATURED PROJECTS</h2>
@@ -246,6 +270,10 @@ const levelClass = ['none', 'low', 'med', 'high'];
     grid-template-columns: 1fr 2fr;
     gap: 32px;
     margin: 32px 0;
+  }
+  .home-activity-solo {
+    max-width: 560px;
+    margin: 32px auto;
   }
   .latest-writing .label {
     display: block;

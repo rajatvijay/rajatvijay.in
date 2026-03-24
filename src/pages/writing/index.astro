@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import { getSortedPosts } from '../../utils/posts';
 import { formatDateMedium } from '../../utils/formatDate';
 
@@ -14,38 +15,55 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
       Essays on building AI products, leading engineering teams, and the path from frontend to AI leadership.
     </p>
 
-    <div class="tags-row" role="list" aria-label="Filter by tag">
-      {allTags.map(tag => (
-        <a href={`/writing/tag/${tag}`} class="pill pill-coral" role="listitem">{tag}</a>
-      ))}
-    </div>
-
-    <ul class="writing-list">
-      {allPosts.map(post => (
-        <li class="writing-item">
-          <a href={`/writing/${post.id}`} class="writing-link">
-            <div class="writing-meta">
-              <time class="meta" datetime={post.data.date.toISOString()}>{formatDateMedium(post.data.date)}</time>
-              <span class="meta">{post.data.readTime} min read</span>
-            </div>
-            <h2 class="writing-title">{post.data.title}</h2>
-            <p class="writing-desc secondary-text">{post.data.description}</p>
-          </a>
-          <div class="writing-tags">
-            {post.data.tags.map(tag => (
-              <a href={`/writing/tag/${tag}`} class="pill pill-teal pill-sm">{tag}</a>
+    {allPosts.length > 0 ? (
+      <Fragment>
+        {allTags.length > 0 && (
+          <div class="tags-row" role="list" aria-label="Filter by tag">
+            {allTags.map(tag => (
+              <a href={`/writing/tag/${tag}`} class="pill pill-coral" role="listitem">{tag}</a>
             ))}
           </div>
-        </li>
-      ))}
-    </ul>
+        )}
 
-    {allPosts.length > 0 ? (
-      <div class="reading-stats surface-card writing-end-card">
-        <p class="meta">You've read through all {allPosts.length} posts</p>
-      </div>
+        <ul class="writing-list">
+          {allPosts.map(post => (
+            <li class="writing-item">
+              <a href={`/writing/${post.id}`} class="writing-link">
+                <div class="writing-meta">
+                  <time class="meta" datetime={post.data.date.toISOString()}>{formatDateMedium(post.data.date)}</time>
+                  <span class="meta">{post.data.readTime} min read</span>
+                </div>
+                <h2 class="writing-title">{post.data.title}</h2>
+                <p class="writing-desc secondary-text">{post.data.description}</p>
+              </a>
+              <div class="writing-tags">
+                {post.data.tags.map(tag => (
+                  <a href={`/writing/tag/${tag}`} class="pill pill-teal pill-sm">{tag}</a>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div class="reading-stats surface-card writing-end-card">
+          <p class="meta">You've read through all {allPosts.length} posts</p>
+        </div>
+      </Fragment>
     ) : (
-      <p class="secondary-text writing-empty">No posts yet. Check back soon.</p>
+      <div class="coming-soon">
+        <div class="coming-soon-inner">
+          <span class="label accent-text">COMING SOON</span>
+          <p class="coming-soon-text">
+            I'm working on the first batch of essays. Topics on deck: career transitions
+            into AI leadership, building LLM products at enterprise scale, and the frontend
+            skills that transfer to AI product work.
+          </p>
+          <p class="coming-soon-sub meta">
+            Subscribe to get notified when the first essay drops.
+          </p>
+        </div>
+        <NewsletterSignup variant="inline" />
+      </div>
     )}
   </div>
 </BaseLayout>
@@ -58,14 +76,10 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
     margin-bottom: 32px;
   }
   .pill-sm {
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 2px 8px;
   }
   .writing-end-card {
-    text-align: center;
-    margin-top: 40px;
-  }
-  .writing-empty {
     text-align: center;
     margin-top: 40px;
   }
@@ -73,5 +87,24 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
     display: flex;
     gap: 6px;
     padding-bottom: 24px;
+  }
+
+  /* Coming soon */
+  .coming-soon {
+    margin-top: 32px;
+  }
+  .coming-soon-inner {
+    text-align: center;
+    max-width: 480px;
+    margin: 0 auto 24px;
+  }
+  .coming-soon-text {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 12px 0;
+  }
+  .coming-soon-sub {
+    margin-bottom: 24px;
   }
 </style>
