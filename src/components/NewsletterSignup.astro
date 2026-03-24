@@ -159,10 +159,13 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
   .newsletter.full {
     text-align: center;
     max-width: 560px;
-    margin: 40px auto;
+    margin: 0 auto;
     border: none;
     background: transparent;
     padding: 0;
+  }
+  .newsletter.full .newsletter-title {
+    font-size: 32px;
   }
   .newsletter-title {
     font-family: var(--font-serif);
