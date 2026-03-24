@@ -156,10 +156,12 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
     animation: fadeInUp 0.4s ease-out both;
   }
   .newsletter.full {
-    border-top: 3px solid var(--accent);
     text-align: center;
     max-width: 560px;
     margin: 40px auto;
+    border: none;
+    background: transparent;
+    padding: 0;
   }
   .newsletter-title {
     font-family: var(--font-serif);
@@ -230,7 +232,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
     min-height: 20px;
   }
   .newsletter-error {
-    color: var(--accent-text);
+    color: var(--error);
   }
   .newsletter-success {
     font-size: 15px;

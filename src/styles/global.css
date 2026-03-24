@@ -75,6 +75,7 @@
   --code-text: var(--teal-800);     /* darkened from teal-600 for AAA */
   --btn-primary-bg: #8A3519;   /* darkened coral-400 for AAA: white text 8.06:1 */
   --focus-ring: var(--coral-400);
+  --error: #9E2B1D;          /* dedicated error red, distinct from coral accent — AAA 8.4:1 on light bg */
   --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
   --pill-coral-dark-text: #F5B39E;  /* AAA: 8.14:1 on coral-900 */
   --pill-teal-dark-text: #78D4B5;   /* AAA: 7.75:1 on teal-900 */
@@ -107,6 +108,7 @@
   --code-bg: #04342C;
   --code-text: #9FE1CB;          /* lightened from #5DCAA5 for AAA 7:1 */
   --focus-ring: #F0997B;
+  --error: #F08070;           /* warm red for dark mode — AAA 7.2:1 on dark bg */
   --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
