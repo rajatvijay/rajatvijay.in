@@ -121,10 +121,13 @@ function isActive(href: string) {
     border: none;
     cursor: pointer;
     color: var(--text-secondary);
-    padding: 6px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 6px;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: color 0.2s;
   }
   .dark-toggle:hover { color: var(--text-primary); }
@@ -138,7 +141,11 @@ function isActive(href: string) {
     border: none;
     cursor: pointer;
     color: var(--text-secondary);
-    padding: 4px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
   }
   @media (max-width: 768px) {
     .nav-links {

@@ -19,11 +19,11 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
 ---
 
 <BaseLayout title={`${data.title} — Rajat`} description={data.description}>
-  <div class="container" style="padding-top: 40px;">
+  <div class="container page-top-sm">
     <a href="/products" class="back-link meta">← All products</a>
 
     <div class="product-header">
-      <h1 style="margin-bottom: 4px;">{data.title}</h1>
+      <h1 class="product-title">{data.title}</h1>
       <p class="secondary-text">{data.tagline}</p>
     </div>
 
@@ -54,6 +54,7 @@ const ctaLabel = data.status === 'coming-soon' ? 'Coming soon' : 'Visit →';
 </BaseLayout>
 
 <style>
+  .product-title { margin-bottom: 4px; }
   .product-header { margin: 24px 0 16px; }
   .meta-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .cta-btn { margin-bottom: 32px; }

@@ -43,10 +43,10 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
 
   <div class="reading-progress" id="reading-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
 
-  <article class="container" style="padding-top: 40px;">
+  <article class="container page-top-sm">
     <a href="/writing" class="back-link meta">← Back to writing</a>
 
-    <div class="post-tags" style="margin: 16px 0 8px;">
+    <div class="post-tags">
       {post.data.tags.map(tag => (
         <span class="pill pill-coral">{tag}</span>
       ))}
@@ -105,9 +105,9 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
         requestAnimationFrame(() => {
           const scrollTop = window.scrollY;
           const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = Math.min(Math.round((scrollTop / docHeight) * 100), 100);
-          progressBar.style.width = `${progress}%`;
-          progressBar.setAttribute('aria-valuenow', String(progress));
+          const progress = Math.min(scrollTop / docHeight, 1);
+          progressBar.style.transform = `scaleX(${progress})`;
+          progressBar.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
           ticking = false;
         });
         ticking = true;
@@ -132,8 +132,11 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
     height: 3px;
     background: var(--accent);
     z-index: 200;
-    width: 0%;
-    transition: width 0.1s;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.1s;
+    will-change: transform;
   }
   .post-title {
     font-size: 32px;
@@ -150,6 +153,7 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
   .post-tags {
     display: flex;
     gap: 8px;
+    margin: 16px 0 8px;
   }
   .prose {
     margin: 32px 0;

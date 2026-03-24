@@ -17,13 +17,13 @@ const data = project.data;
 ---
 
 <BaseLayout title={`${data.title} — Rajat`} description={data.subtitle}>
-  <div class="container" style="padding-top: 40px;">
+  <div class="container page-top-sm">
     <a href="/projects" class="back-link meta">← All projects</a>
 
     <div class="project-header">
       <div class="project-icon" style={`background: ${data.color}`}></div>
       <div>
-        <h1 style="margin-bottom: 4px;">{data.title}</h1>
+        <h1 class="project-title">{data.title}</h1>
         <p class="secondary-text">{data.subtitle}</p>
       </div>
     </div>
@@ -54,6 +54,9 @@ const data = project.data;
 </BaseLayout>
 
 <style>
+  .project-title {
+    margin-bottom: 4px;
+  }
   .project-header {
     display: flex;
     align-items: center;

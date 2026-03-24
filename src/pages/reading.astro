@@ -15,9 +15,9 @@ const books = readingData
   <Fragment slot="head">
     <link rel="preconnect" href="https://m.media-amazon.com" />
   </Fragment>
-  <div class="container" style="padding-top: 48px;">
+  <div class="container page-top">
     <h1>Reading</h1>
-    <p class="secondary-text" style="margin: 8px 0 40px;">
+    <p class="secondary-text page-desc">
       Books I'm reading or recently finished. Updated monthly.
     </p>
 
@@ -104,11 +104,11 @@ const books = readingData
   }
   :global(.dark) .book-status.reading {
     background: var(--teal-900);
-    color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
+    color: var(--pill-teal-dark-text);
   }
   :global(.dark) .book-status.finished {
     background: var(--neutral-800);
-    color: #D5D3CD;             /* AAA: 7.47:1 on #3D3B36 */
+    color: var(--badge-coming-dark-text);
   }
   .book-take {
     font-size: 14px;

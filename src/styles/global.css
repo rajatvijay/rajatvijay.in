@@ -73,8 +73,12 @@
   --teal-hover: var(--teal-600);
   --code-bg: var(--teal-50);
   --code-text: var(--teal-800);     /* darkened from teal-600 for AAA */
+  --btn-primary-bg: #8A3519;   /* darkened coral-400 for AAA: white text 8.06:1 */
   --focus-ring: var(--coral-400);
   --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --pill-coral-dark-text: #F5B39E;  /* AAA: 8.14:1 on coral-900 */
+  --pill-teal-dark-text: #78D4B5;   /* AAA: 7.75:1 on teal-900 */
+  --badge-coming-dark-text: #D5D3CD; /* AAA: 7.47:1 on neutral-800 */
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -174,7 +178,7 @@ a:hover {
   left: 16px;
   z-index: 200;
   padding: 8px 16px;
-  background: var(--coral-600);  /* AAA: white on #993C1D = 6.96:1 (AA large+, near-AAA) */
+  background: var(--coral-800);  /* AAA: white on #712B13 ≈ 10.5:1 */
   color: white;
   font-size: 14px;
   font-weight: 500;
@@ -293,11 +297,11 @@ pre code {
 }
 .dark .status-badge.beta {
   background: var(--teal-900);
-  color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
+  color: var(--pill-teal-dark-text);
 }
 .dark .status-badge.coming-soon {
   background: var(--neutral-800);
-  color: #D5D3CD;             /* AAA: 7.47:1 on #3D3B36 */
+  color: var(--badge-coming-dark-text);
 }
 .accent-text { color: var(--accent-text); }
 .teal-text { color: var(--teal-text); }
@@ -326,13 +330,22 @@ pre code {
   color: var(--teal-800);
 }
 
+.pill-neutral {
+  background: var(--neutral-200);
+  color: var(--neutral-800);
+}
+
+.dark .pill-neutral {
+  background: var(--neutral-800);
+  color: var(--badge-coming-dark-text);
+}
 .dark .pill-coral {
   background: var(--coral-900);
-  color: #F5B39E;             /* AAA: 8.14:1 on #4A1B0C */
+  color: var(--pill-coral-dark-text);
 }
 .dark .pill-teal {
   background: var(--teal-900);
-  color: #78D4B5;             /* AAA: 7.75:1 on #04342C */
+  color: var(--pill-teal-dark-text);
 }
 
 .tech-pill {
@@ -383,9 +396,9 @@ pre code {
   border-color: var(--text-muted);
 }
 .btn-primary {
-  background: #8A3519;        /* darkened from coral-400 for AAA: white text 8.06:1 */
+  background: var(--btn-primary-bg);
   color: #FFFFFF;
-  border-color: #8A3519;
+  border-color: var(--btn-primary-bg);
 }
 .btn-primary:hover {
   background: var(--accent-hover);
@@ -552,6 +565,39 @@ pre code {
 }
 @media (max-width: 768px) {
   .items-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════ Writing list (shared by writing/index and writing/tag) ═══════ */
+.writing-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.writing-item {
+  border-bottom: 1px solid var(--border);
+}
+.writing-link {
+  display: block;
+  padding: 24px 0 8px;
+  color: var(--text-primary);
+}
+.writing-link:hover { color: var(--text-primary); }
+.writing-link:hover .writing-title { color: var(--accent); }
+.writing-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+.writing-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  transition: color 0.2s;
+}
+.writing-desc {
+  font-size: 15px;
+  margin-bottom: 8px;
+  line-height: 1.5;
 }
 
 /* ═══════ Reduced motion ═══════ */

@@ -11,9 +11,9 @@ const rest = allTalks.filter(t => !t.data.featured);
   <Fragment slot="head">
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
   </Fragment>
-  <div class="container" style="padding-top: 48px;">
+  <div class="container page-top">
     <h1>Speaking & Talks</h1>
-    <p class="secondary-text" style="margin: 8px 0 40px;">
+    <p class="secondary-text page-desc">
       Conference talks, podcast appearances, and internal presentations I can share.
     </p>
 
@@ -50,8 +50,8 @@ const rest = allTalks.filter(t => !t.data.featured);
       </div>
     )}
 
-    <section style="margin-top: 48px;">
-      <span class="label" style="display: block; margin-bottom: 16px;">ALL TALKS</span>
+    <section class="all-talks-section">
+      <span class="label all-talks-label">ALL TALKS</span>
       <div class="talks-list">
         {rest.map(talk => (
           <a href={`/talks/${talk.id}`} class="talk-item">
@@ -62,7 +62,7 @@ const rest = allTalks.filter(t => !t.data.featured);
             <div class="talk-tags">
               {talk.data.youtubeId && <span class="pill pill-teal">Video</span>}
               {talk.data.slidesUrl && <span class="pill pill-coral">Slides</span>}
-              {!talk.data.youtubeId && !talk.data.slidesUrl && <span class="pill" style="background: var(--neutral-200); color: var(--neutral-600);">Notes</span>}
+              {!talk.data.youtubeId && !talk.data.slidesUrl && <span class="pill pill-neutral">Notes</span>}
             </div>
           </a>
         ))}
@@ -72,6 +72,13 @@ const rest = allTalks.filter(t => !t.data.featured);
 </BaseLayout>
 
 <style>
+  .all-talks-section {
+    margin-top: 48px;
+  }
+  .all-talks-label {
+    display: block;
+    margin-bottom: 16px;
+  }
   .featured-talk {
     border-left: 3px solid var(--accent);
     overflow: hidden;

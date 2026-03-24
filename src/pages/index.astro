@@ -100,7 +100,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
       <section class="activity-feed">
         <h2 class="label">ACTIVITY</h2>
         <div class="github-widget surface-card">
-          <p class="meta" style="margin-bottom: 8px; font-weight: 500;">GitHub</p>
+          <p class="meta github-label">GitHub</p>
           <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
             {github.contributions.weeks.map(week => (
               <div class="contrib-col">
@@ -203,8 +203,8 @@ const levelClass = ['none', 'low', 'med', 'high'];
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     border-radius: 6px;
     color: var(--text-muted);
     transition: color 0.2s, background 0.2s;
@@ -227,7 +227,6 @@ const levelClass = ['none', 'low', 'med', 'high'];
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0;
   }
   .post-list li {
     border-bottom: 1px solid var(--border);
@@ -254,6 +253,10 @@ const levelClass = ['none', 'low', 'med', 'high'];
   .activity-feed .label {
     display: block;
     margin-bottom: 4px;
+  }
+  .github-label {
+    margin-bottom: 8px;
+    font-weight: 500;
   }
   .contrib-grid {
     display: flex;
@@ -356,10 +359,9 @@ const levelClass = ['none', 'low', 'med', 'high'];
     .hero { padding: 48px 16px 24px; }
     .hero-intro { flex-direction: column-reverse; align-items: center; text-align: center; gap: 24px; }
     .avatar { width: 120px; height: 120px; }
-    .hero-ctas { justify-content: center; }
+    .hero-ctas { flex-direction: column; align-items: center; }
     .social-bar { justify-content: center; }
     .home-grid { grid-template-columns: 1fr; }
     .featured-grid { grid-template-columns: 1fr; }
-    .hero-ctas { flex-direction: column; }
   }
 </style>
