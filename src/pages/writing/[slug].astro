@@ -72,8 +72,8 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
 
     <div class="share-row">
       <span class="meta">Share:</span>
-      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">X / Twitter</a>
-      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">LinkedIn</a>
+      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">X / Twitter <span class="sr-only">(opens in new tab)</span></a>
+      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${siteUrl}/writing/${post.id}`)}`} target="_blank" rel="noopener noreferrer" class="teal-text">LinkedIn <span class="sr-only">(opens in new tab)</span></a>
       <button class="copy-link teal-text" id="copy-link">Copy link</button>
     </div>
 
@@ -120,9 +120,15 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
   const copyBtn = document.getElementById('copy-link');
   copyBtn?.addEventListener('click', () => {
     navigator.clipboard.writeText(window.location.href)
-      .then(() => { copyBtn.textContent = 'Copied!'; })
+      .then(() => {
+        copyBtn.textContent = 'Copied!';
+        copyBtn.style.color = 'var(--accent)';
+      })
       .catch(() => { copyBtn.textContent = 'Failed'; });
-    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
+    setTimeout(() => {
+      copyBtn.textContent = 'Copy link';
+      copyBtn.style.color = '';
+    }, 2000);
   });
 </script>
 
@@ -175,6 +181,7 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
     font-size: 0.875rem;
     font-family: var(--font-sans);
     color: var(--teal-text);   /* AAA: 8.99:1 on light bg, 8.58:1 on dark bg */
+    transition: color 0.2s;
   }
   .copy-link:hover { color: var(--teal-hover); }
   .post-nav {
@@ -191,6 +198,11 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajat.dev'
   }
   .post-nav-link:hover { color: var(--text-primary); }
   .post-nav-link.next { text-align: right; }
+  @media (max-width: 768px) {
+    .post-nav { flex-direction: column; }
+    .post-nav-link { max-width: 100%; }
+    .post-nav-link.next { text-align: left; }
+  }
   .post-nav-title {
     display: block;
     font-size: 0.875rem;

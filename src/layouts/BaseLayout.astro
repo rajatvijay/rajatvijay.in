@@ -85,5 +85,20 @@ const resolvedOgImage = ogImage || new URL('/og-default.png', Astro.site).toStri
     <slot />
   </main>
   <Footer />
+  <script>
+    // Scroll reveal — animate elements as they enter viewport
+    const revealEls = document.querySelectorAll('[data-reveal],[data-reveal-stagger]');
+    if (revealEls.length) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      revealEls.forEach((el) => obs.observe(el));
+    }
+  </script>
 </body>
 </html>

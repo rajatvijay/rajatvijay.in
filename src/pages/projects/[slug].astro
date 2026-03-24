@@ -34,7 +34,7 @@ const data = project.data;
       ))}
     </div>
 
-    <div class="impact-grid">
+    <div class="impact-grid" data-reveal-stagger>
       {data.impact.map(item => (
         <div class="impact-card surface-card">
           <span class="impact-metric accent-text">{item.metric}</span>
@@ -92,7 +92,6 @@ const data = project.data;
     letter-spacing: -0.5px;
     margin-bottom: 4px;
   }
-  .divider { border: none; border-top: 1px solid var(--border); margin: 0 0 32px; }
   @media (max-width: 768px) {
     .impact-grid { grid-template-columns: 1fr; }
   }

@@ -13,7 +13,7 @@ const allProjects = await getCollection('projects');
     </p>
 
     {allProjects.length > 0 ? (
-      <div class="items-grid">
+      <div class="items-grid" data-reveal-stagger>
         {allProjects.map(project => (
           <a href={`/projects/${project.id}`} class="item-card surface-card">
             <h2 class="item-title">{project.data.title}</h2>

@@ -15,17 +15,8 @@ export interface ContributionData {
   weeks: { levels: number[] }[];
 }
 
-export interface RecentCommit {
-  repo: string;
-  message: string;
-  date: string;
-  rawDate: string;
-}
-
 export interface GitHubData {
   contributions: ContributionData;
-  recentCommits: RecentCommit[];
-  fetchedAt: string;
 }
 
 function contributionLevel(count: number): number {
@@ -33,16 +24,6 @@ function contributionLevel(count: number): number {
   if (count <= 3) return 1;
   if (count <= 8) return 2;
   return 3;
-}
-
-function relativeTime(dateStr: string): string {
-  const diffMs = Date.now() - new Date(dateStr).getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffHours < 1) return 'just now';
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 30) return `${diffDays}d ago`;
-  return `${Math.floor(diffDays / 30)}mo ago`;
 }
 
 async function fetchGitHub(query: string) {
@@ -93,23 +74,6 @@ export async function getGitHubData(): Promise<GitHubData> {
           }
         }
       }
-      repositories(first: 10, orderBy: {field: PUSHED_AT, direction: DESC}, privacy: PUBLIC) {
-        nodes {
-          name
-          defaultBranchRef {
-            target {
-              ... on Commit {
-                history(first: 3) {
-                  nodes {
-                    messageHeadline
-                    committedDate
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }`);
 
@@ -118,34 +82,13 @@ export async function getGitHubData(): Promise<GitHubData> {
   }
 
   const calendar = data.data.viewer.contributionsCollection.contributionCalendar;
-  const repos = data.data.viewer.repositories.nodes;
 
   const weeks = calendar.weeks.map((w: ContributionWeek) => ({
     levels: w.contributionDays.map((d: ContributionDay) => contributionLevel(d.contributionCount)),
   }));
 
-  const recentCommits: RecentCommit[] = [];
-  for (const repo of repos) {
-    const ref = repo.defaultBranchRef;
-    if (!ref?.target?.history?.nodes) continue;
-    for (const commit of ref.target.history.nodes) {
-      recentCommits.push({
-        repo: repo.name,
-        message: commit.messageHeadline,
-        rawDate: commit.committedDate,
-        date: relativeTime(commit.committedDate),
-      });
-    }
-  }
-
-  recentCommits.sort((a, b) =>
-    new Date(b.rawDate).getTime() - new Date(a.rawDate).getTime()
-  );
-
   return {
     contributions: { totalContributions: calendar.totalContributions, weeks },
-    recentCommits: recentCommits.slice(0, 5),
-    fetchedAt: new Date().toISOString(),
   };
 }
 
@@ -163,7 +106,5 @@ function fallbackData(): GitHubData {
 
   return {
     contributions: { totalContributions: 0, weeks },
-    recentCommits: [],
-    fetchedAt: new Date().toISOString(),
   };
 }

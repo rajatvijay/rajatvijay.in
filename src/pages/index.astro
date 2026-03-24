@@ -51,7 +51,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
   </Fragment>
   <section class="hero container">
     <div class="hero-intro">
-      <div class="hero-text">
+      <div class="hero-text hero-entrance">
         <span class="label accent-text">DIRECTOR OF ENGINEERING & AI</span>
         <h1 class="hero-title">
           I went from writing React components<br />
@@ -73,7 +73,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
           ))}
         </div>
       </div>
-      <img src="/rajat.jpg" alt="Rajat Vijay" class="avatar" width="200" height="200" fetchpriority="high" decoding="async" />
+      <img src="/rajat.jpg" alt="Rajat Vijay" class="avatar avatar-entrance" width="200" height="200" fetchpriority="high" decoding="async" />
     </div>
   </section>
 
@@ -81,7 +81,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
     <TheArc />
     <MetricsStrip />
 
-    <div class="home-grid">
+    <div class="home-grid" data-reveal>
       {allPosts.length > 0 && <section class="latest-writing">
         <h2 class="label">LATEST WRITING</h2>
         <ul class="post-list">
@@ -119,7 +119,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
       </section>
     </div>
 
-    {allProjects.length > 0 && <section class="featured-section">
+    {allProjects.length > 0 && <section class="featured-section" data-reveal>
       <h2 class="label">FEATURED PROJECTS</h2>
       <div class="featured-grid">
         {allProjects.slice(0, 3).map(project => (
@@ -132,7 +132,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
       <a href="/projects" class="section-link teal-text">All projects <span class="arrow">&rarr;</span></a>
     </section>}
 
-    {featuredProducts.length > 0 && <section class="featured-section">
+    {featuredProducts.length > 0 && <section class="featured-section" data-reveal>
       <h2 class="label">FEATURED PRODUCTS</h2>
       <div class="featured-grid">
         {featuredProducts.slice(0, 3).map(product => (
@@ -146,7 +146,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
     </section>}
 
     {currentlyReading.length > 0 && (
-      <section class="featured-section">
+      <section class="featured-section" data-reveal>
         <h2 class="label">FEATURED READING</h2>
         <div class="featured-grid">
           {currentlyReading.slice(0, 3).map(book => (
@@ -166,6 +166,23 @@ const levelClass = ['none', 'low', 'med', 'high'];
 </BaseLayout>
 
 <style>
+  /* Hero entrance choreography */
+  .hero-entrance > * {
+    animation: hero-enter 0.6s var(--ease-out-quart) backwards;
+  }
+  .hero-entrance > :nth-child(2) { animation-delay: 100ms; }
+  .hero-entrance > :nth-child(3) { animation-delay: 180ms; }
+  .hero-entrance > :nth-child(4) { animation-delay: 260ms; }
+  .hero-entrance > :nth-child(5) { animation-delay: 340ms; }
+  @keyframes hero-enter {
+    from { opacity: 0; transform: translateY(20px); }
+  }
+  .avatar-entrance {
+    animation: avatar-enter 0.7s var(--ease-out-quart) 0.15s backwards;
+  }
+  @keyframes avatar-enter {
+    from { opacity: 0; transform: scale(0.9); }
+  }
   .hero {
     padding: 80px 24px 40px;
   }
@@ -218,6 +235,12 @@ const levelClass = ['none', 'low', 'med', 'high'];
     color: var(--text-primary);
     background: var(--surface);
   }
+  .social-icon[aria-label*="LinkedIn"]:hover {
+    color: #0A66C2;
+  }
+  :global(.dark) .social-icon[aria-label*="LinkedIn"]:hover {
+    color: #5BA3E0;
+  }
   .home-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -241,8 +264,9 @@ const levelClass = ['none', 'low', 'med', 'high'];
     flex-direction: column;
     padding: 14px 0;
     color: var(--text-primary);
+    transition: transform 0.2s var(--ease-out-quart);
   }
-  .post-link:hover { color: var(--text-primary); }
+  .post-link:hover { color: var(--text-primary); transform: translateX(4px); }
   .post-link:hover .post-title { color: var(--accent); }
   .post-title {
     font-size: 15px;
@@ -349,7 +373,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
   .featured-card {
     color: var(--text-primary);
     display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s var(--ease-out-quart), box-shadow 0.2s;
   }
   .featured-card:hover {
     transform: translateY(-2px);
@@ -383,6 +407,12 @@ const levelClass = ['none', 'low', 'med', 'high'];
     margin-top: 12px;
     font-size: 14px;
     font-weight: 500;
+  }
+  .home-grid > * {
+    min-width: 0;
+  }
+  .github-widget {
+    overflow: hidden;
   }
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 24px; }

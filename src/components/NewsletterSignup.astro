@@ -193,7 +193,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
     padding: 0;
   }
   .newsletter.full .newsletter-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 1rem + 2vw, 2rem);
   }
   .newsletter-title {
     font-family: var(--font-serif);
@@ -304,12 +304,17 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
     to { stroke-dashoffset: 0; }
   }
 
-  @media (max-width: 480px) {
-    .newsletter-form-fields {
-      flex-direction: column;
+  @media (max-width: 768px) {
+    .newsletter {
+      padding: 20px;
     }
     .newsletter-input {
       max-width: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .newsletter-form-fields {
+      flex-direction: column;
     }
   }
 </style>

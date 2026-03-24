@@ -34,9 +34,57 @@ const metrics = [
     letter-spacing: -0.5px;
     margin-bottom: 4px;
   }
+  /* Entrance animation */
+  .metrics-strip > * {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s var(--ease-out-quart), transform 0.5s var(--ease-out-quart);
+  }
+  .metrics-strip.revealed > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .metrics-strip.revealed > :nth-child(2) { transition-delay: 80ms; }
+  .metrics-strip.revealed > :nth-child(3) { transition-delay: 160ms; }
+  .metrics-strip.revealed > :nth-child(4) { transition-delay: 240ms; }
   @media (max-width: 768px) {
     .metrics-strip {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>
+
+<script>
+  const strip = document.querySelector('.metrics-strip');
+  if (strip) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          strip.classList.add('revealed');
+          if (!reduceMotion) {
+            strip.querySelectorAll('.metric-value').forEach((el) => {
+              const text = el.textContent || '';
+              const match = text.match(/^(\d+)(.*)$/);
+              if (!match) return;
+              const target = parseInt(match[1], 10);
+              const suffix = match[2];
+              const duration = 800;
+              const start = performance.now();
+              el.textContent = '0' + suffix;
+              function tick(now: number) {
+                const t = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - t, 4);
+                el.textContent = Math.round(target * eased) + suffix;
+                if (t < 1) requestAnimationFrame(tick);
+              }
+              requestAnimationFrame(tick);
+            });
+          }
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    obs.observe(strip);
+  }
+</script>

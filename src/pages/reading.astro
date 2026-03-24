@@ -58,6 +58,11 @@ const books = readingData
     gap: 20px;
     align-items: center;
     padding: 16px 20px;
+    transition: transform 0.2s var(--ease-out-quart), box-shadow 0.2s;
+  }
+  .book-row:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
   }
   .book-cover {
     width: 64px;

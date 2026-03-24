@@ -18,7 +18,7 @@ const rest = allTalks.filter(t => !t.data.featured);
     </p>
 
     {featured && (
-      <div class="featured-talk surface-card">
+      <div class="featured-talk surface-card" data-reveal>
         <div class="featured-grid">
           <div class="featured-video">
             {featured.data.youtubeId ? (
@@ -39,7 +39,7 @@ const rest = allTalks.filter(t => !t.data.featured);
             <a href={`/talks/${featured.id}`} class="featured-title-link">
               <h2>{featured.data.title}</h2>
             </a>
-            <p class="meta">{featured.data.event} &middot; {featured.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} &middot; {featured.data.duration}</p>
+            <p class="meta">{featured.data.event} &middot; <time datetime={featured.data.date.toISOString()}>{featured.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</time> &middot; {featured.data.duration}</p>
             <p class="featured-desc">{featured.data.description}</p>
             <div class="featured-actions">
               <a href={`/talks/${featured.id}`} class="teal-text">Read more →</a>
@@ -50,14 +50,14 @@ const rest = allTalks.filter(t => !t.data.featured);
       </div>
     )}
 
-    <section class="all-talks-section">
+    <section class="all-talks-section" data-reveal>
       <span class="label all-talks-label">ALL TALKS</span>
       <div class="talks-list">
         {rest.map(talk => (
           <a href={`/talks/${talk.id}`} class="talk-item">
             <div class="talk-info">
               <h3>{talk.data.title}</h3>
-              <p class="meta">{talk.data.event} &middot; {talk.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} &middot; {talk.data.duration}</p>
+              <p class="meta">{talk.data.event} &middot; <time datetime={talk.data.date.toISOString()}>{talk.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</time> &middot; {talk.data.duration}</p>
             </div>
             <div class="talk-tags">
               {talk.data.youtubeId && <span class="pill pill-teal">Video</span>}
@@ -147,10 +147,11 @@ const rest = allTalks.filter(t => !t.data.featured);
     padding: 20px 0;
     border-bottom: 1px solid var(--border);
     color: var(--text-primary);
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s var(--ease-out-quart);
   }
   .talk-item:hover {
     color: var(--text-primary);
+    transform: translateX(4px);
   }
   .talk-item:hover h3 {
     color: var(--accent-text);
@@ -165,6 +166,7 @@ const rest = allTalks.filter(t => !t.data.featured);
     display: flex;
     gap: 8px;
     flex-shrink: 0;
+    flex-wrap: wrap;
   }
   @media (max-width: 768px) {
     .featured-grid { grid-template-columns: 1fr; }

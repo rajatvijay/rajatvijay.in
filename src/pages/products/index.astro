@@ -21,7 +21,7 @@ const typeLabels: Record<string, string> = {
     </p>
 
     {allProducts.length > 0 ? (
-      <div class="items-grid">
+      <div class="items-grid" data-reveal-stagger>
         {allProducts.map(product => (
           <a href={`/products/${product.id}`} class="item-card surface-card">
             <div class="item-top">
