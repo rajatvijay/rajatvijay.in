@@ -21,16 +21,16 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
           type="email"
           id={`newsletter-email-${variant}`}
           name="email"
-          placeholder="you@example.com"
+          placeholder="your@email.com"
           autocomplete="email"
           required
           aria-describedby={`newsletter-status-${variant}`}
           class="newsletter-input"
         />
         <input type="text" name="hp_zq9k" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button type="submit" class="btn btn-primary newsletter-btn">Subscribe</button>
+        <button type="submit" class="btn btn-primary newsletter-btn">Join the weekly</button>
       </div>
-      <p class="newsletter-privacy">No spam. Unsubscribe anytime.</p>
+      <p class="newsletter-privacy">One email a week. No tricks.</p>
       <div id={`newsletter-status-${variant}`} class="newsletter-status" role="status" aria-live="polite"></div>
     </form>
     <noscript>
@@ -53,7 +53,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
       const honeypot = form.querySelector<HTMLInputElement>('input[name="hp_zq9k"]');
       if (honeypot && honeypot.value) {
         const status = form.querySelector('.newsletter-status');
-        if (status) status.textContent = 'Check your inbox to confirm your subscription!';
+        if (status) status.textContent = 'Welcome — check your inbox to confirm.';
         submitting = false;
         return;
       }
@@ -75,7 +75,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
 
       emailInput.disabled = true;
       button.disabled = true;
-      button.textContent = 'Subscribing...';
+      button.textContent = 'Joining...';
       status.textContent = '';
       status.classList.remove('newsletter-error');
 
@@ -94,7 +94,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
           succeeded = true;
           const successMsg = document.createElement('p');
           successMsg.className = 'newsletter-success';
-          successMsg.textContent = 'Check your inbox to confirm your subscription!';
+          successMsg.textContent = 'Welcome aboard — check your inbox to confirm.';
           successMsg.tabIndex = -1;
           form.replaceChildren(successMsg);
           successMsg.focus();
@@ -117,7 +117,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
         if (!succeeded) {
           emailInput.disabled = false;
           button.disabled = false;
-          button.textContent = 'Subscribe';
+          button.textContent = 'Join the weekly';
         }
         submitting = false;
       }
