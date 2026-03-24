@@ -3,19 +3,127 @@ interface Props {
   variant?: 'inline' | 'full';
 }
 const { variant = 'inline' } = Astro.props;
+const HeadingTag = variant === 'full' ? 'h1' : 'h2';
 ---
 
 <section class:list={['newsletter', variant]}>
   <div class="newsletter-inner">
     {variant === 'full' && <span class="label accent-text">NEWSLETTER</span>}
-    <h2 class="newsletter-title">The Frontend→AI Weekly</h2>
+    <HeadingTag class="newsletter-title">The Frontend&rarr;AI Weekly</HeadingTag>
     <p class="meta newsletter-desc">
       Weekly essays on building AI products, leading engineering teams,
       and the messy path from frontend to AI leadership.
     </p>
-    <p class="newsletter-coming-soon">Newsletter launching soon.</p>
+    <form class="newsletter-form" aria-label="Newsletter subscription">
+      <div class="newsletter-form-fields">
+        <label for={`newsletter-email-${variant}`} class="sr-only">Email address</label>
+        <input
+          type="email"
+          id={`newsletter-email-${variant}`}
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+          aria-describedby={`newsletter-status-${variant}`}
+          class="newsletter-input"
+        />
+        <input type="text" name="hp_zq9k" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit" class="btn btn-primary newsletter-btn">Subscribe</button>
+      </div>
+      <p class="newsletter-privacy">No spam. Unsubscribe anytime.</p>
+      <div id={`newsletter-status-${variant}`} class="newsletter-status" role="status" aria-live="polite"></div>
+    </form>
+    <noscript>
+      <p class="newsletter-privacy">
+        <a href="https://buttondown.com/vijay" class="teal-text">Subscribe on Buttondown</a>
+      </p>
+    </noscript>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.newsletter-form').forEach((form) => {
+    let submitting = false;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (submitting) return;
+      submitting = true;
+
+      const honeypot = form.querySelector<HTMLInputElement>('input[name="hp_zq9k"]');
+      if (honeypot && honeypot.value) {
+        const status = form.querySelector('.newsletter-status');
+        if (status) status.textContent = 'Check your inbox to confirm your subscription!';
+        submitting = false;
+        return;
+      }
+
+      const emailInput = form.querySelector<HTMLInputElement>('input[name="email"]');
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const status = form.querySelector<HTMLElement>('.newsletter-status');
+      if (!emailInput || !button || !status) {
+        console.error('NewsletterSignup: missing DOM elements');
+        submitting = false;
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      if (!email) {
+        submitting = false;
+        return;
+      }
+
+      emailInput.disabled = true;
+      button.disabled = true;
+      button.textContent = 'Subscribing...';
+      status.textContent = '';
+      status.classList.remove('newsletter-error');
+
+      let succeeded = false;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch('https://buttondown.com/api/emails/embed-subscribe/vijay', {
+          method: 'POST',
+          body: new URLSearchParams({ email, embed: '1' }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          succeeded = true;
+          const successMsg = document.createElement('p');
+          successMsg.className = 'newsletter-success';
+          successMsg.textContent = 'Check your inbox to confirm your subscription!';
+          successMsg.tabIndex = -1;
+          form.replaceChildren(successMsg);
+          successMsg.focus();
+        } else {
+          const msg = res.status === 429
+            ? 'Too many requests. Please try again later.'
+            : 'Something went wrong. Please check your email and try again.';
+          status.textContent = msg;
+          status.classList.add('newsletter-error');
+          emailInput.focus();
+        }
+      } catch (error) {
+        console.error('Newsletter subscription failed:', error);
+        const msg = error instanceof DOMException && error.name === 'AbortError'
+          ? 'Request timed out. Please try again.'
+          : 'Something went wrong. Please try again.';
+        status.textContent = msg;
+        status.classList.add('newsletter-error');
+      } finally {
+        if (!succeeded) {
+          emailInput.disabled = false;
+          button.disabled = false;
+          button.textContent = 'Subscribe';
+        }
+        submitting = false;
+      }
+    });
+  });
+</script>
 
 <style>
   .newsletter {
@@ -38,16 +146,84 @@ const { variant = 'inline' } = Astro.props;
     margin: 8px 0;
   }
   .newsletter-desc {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     max-width: 440px;
   }
   .newsletter.full .newsletter-desc {
     margin-left: auto;
     margin-right: auto;
   }
-  .newsletter-coming-soon {
-    font-size: 13px;
+
+  /* Form */
+  .newsletter-form-fields {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .newsletter.full .newsletter-form-fields {
+    justify-content: center;
+  }
+  .newsletter-input {
+    flex: 1;
+    max-width: 320px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    min-height: 44px;
+  }
+  .newsletter-input::placeholder {
     color: var(--text-muted);
-    font-style: italic;
+  }
+  .newsletter-input:focus {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-color: var(--focus-ring);
+  }
+  .newsletter-input:disabled,
+  .newsletter-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .newsletter-btn {
+    min-height: 44px;
+    min-width: 44px;
+    white-space: nowrap;
+  }
+  .newsletter-privacy {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+  .newsletter-status {
+    margin-top: 8px;
+    font-size: 14px;
+    min-height: 20px;
+  }
+  .newsletter-error {
+    color: var(--accent-text);
+  }
+  .newsletter-success {
+    font-size: 15px;
+    color: var(--teal-text);
+    font-weight: 500;
+    padding: 8px 0;
+  }
+  .newsletter-success:focus {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 480px) {
+    .newsletter-form-fields {
+      flex-direction: column;
+    }
+    .newsletter-input {
+      max-width: none;
+    }
   }
 </style>
