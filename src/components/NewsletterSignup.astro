@@ -92,9 +92,7 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
 
         if (res.ok) {
           succeeded = true;
-          form.style.transition = 'opacity 0.2s ease-out';
-          form.style.opacity = '0';
-          setTimeout(() => {
+          const showSuccess = () => {
             const successMsg = document.createElement('p');
             successMsg.className = 'newsletter-success';
             successMsg.textContent = 'Welcome aboard — check your inbox to confirm.';
@@ -107,7 +105,10 @@ const HeadingTag = variant === 'full' ? 'h1' : 'h2';
               successMsg.style.opacity = '1';
               successMsg.focus();
             });
-          }, 200);
+          };
+          form.style.transition = 'opacity 0.2s ease-out';
+          form.style.opacity = '0';
+          form.addEventListener('transitionend', showSuccess, { once: true });
         } else {
           const msg = res.status === 429
             ? 'Too many requests. Please try again later.'
