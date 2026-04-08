@@ -5,29 +5,79 @@ import { getCollection } from 'astro:content';
 const allProjects = await getCollection('projects');
 ---
 
-<BaseLayout title="Projects — Rajat" description="Open source projects and case studies from building AI products at enterprise scale.">
+<BaseLayout title="Projects — Rajat" description="Open source projects I'm building.">
   <div class="container page-top">
     <h1>Projects</h1>
     <p class="secondary-text page-desc">
-      Open source work and case studies from building AI products at enterprise scale.
+      Things I'm building in the open.
     </p>
 
     {allProjects.length > 0 ? (
-      <div class="items-grid" data-reveal-stagger>
+      <ul class="project-list" data-reveal-stagger>
         {allProjects.map(project => (
-          <a href={`/projects/${project.id}`} class="item-card surface-card">
-            <h2 class="item-title">{project.data.title}</h2>
-            <p class="item-desc">{project.data.subtitle}</p>
-            <div class="item-tags">
-              {project.data.techStack.map(tech => (
-                <span class="tech-pill">{tech}</span>
-              ))}
+          <li class="project-item surface-card">
+            <div class="project-top">
+              <h2 class="project-name">{project.data.title}</h2>
+              <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="gh-link teal-text">
+                GitHub &rarr;
+              </a>
             </div>
-          </a>
+            <p class="project-desc">{project.data.description}</p>
+            {project.data.summary && <p class="project-summary">{project.data.summary}</p>}
+            {project.data.techStack.length > 0 && (
+              <div class="item-tags">
+                {project.data.techStack.map(tech => (
+                  <span class="tech-pill">{tech}</span>
+                ))}
+              </div>
+            )}
+          </li>
         ))}
-      </div>
+      </ul>
     ) : (
       <p class="secondary-text">No projects yet. Check back soon.</p>
     )}
   </div>
 </BaseLayout>
+
+<style>
+  .project-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 640px;
+  }
+  .project-item {
+    padding: 20px 24px;
+  }
+  .project-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .project-name {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  .gh-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .project-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .project-summary {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+</style>

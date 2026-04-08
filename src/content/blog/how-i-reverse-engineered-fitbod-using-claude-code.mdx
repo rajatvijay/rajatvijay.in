@@ -1,0 +1,355 @@
+---
+title: "How I Reverse Engineered Fitbod Using Claude Code"
+description: "I used Claude Code to autonomously crawl, extract, and document every screen, asset, and data model from the Fitbod iOS app — 195 screens, 4,525 strings, 821 exercises, and 1,598 files in five hours."
+date: 2025-04-08
+tags: ["claude-code", "reverse-engineering", "ios", "automation"]
+readTime: 15
+featured: true
+---
+
+import Collapse from '../../components/Collapse.astro';
+
+Firstly, I love the product. I have been using [Fitbod](https://fitbod.me) for two years. Last year I was in their top 10% of users for completed workouts, as per their 2025 workout report published in the app. I was a firm believer that the effort of tracking workouts on an app is just too much, but the great UX of this app made me believe otherwise. The UX makes it feel like a natural thing, not an extra effort. These guys are doing some really amazing work.
+
+Since I use this app so frequently, I wanted to make a few modifications to it that would only make sense for me. Customisations. Recently I have been using Claude Code a lot. So I decided to build an exact replica with those customisations.
+
+---
+
+## The Idea
+
+Instead of guessing at the design and features, I wondered: could I use Claude Code to systematically extract everything from the app itself — every screen, asset, string, algorithm, and data model?
+
+The answer was yes. Here's how it went.
+
+---
+
+## What Claude Code Actually Did
+
+I didn't write a single line of code myself. I described what I wanted — a depth-first autonomous crawl of every screen, interaction, and asset in the app — and Claude Code designed the approach, wrote the tools, ran them, observed failures, and fixed them — all in a single long session.
+
+The first thing Claude Code built was a Swift CLI tool (`FitbodAX`) using macOS's Accessibility API to programmatically drive the app. The first version was simple: traverse the AX element tree, tap buttons, take screenshots. That broke immediately — wrapped iOS apps have a degraded AX tree where most interactive elements show up as `AXStaticText`, invisible to any button-press logic. Claude Code diagnosed this from the error output, added a position map that records bounding boxes for every element regardless of role, and implemented a `CGEvent`-based fallback that clicks by coordinates instead of AX actions. That pattern — fail, diagnose, fix — repeated throughout the session.
+
+Beyond the crawler, Claude Code wrote an asset extractor using Apple's private `CoreUI.framework` to pull images from compiled `.car` files, a Core Data model parser for the database schema, shell scripts to convert binary `.strings` and `.plist` files to JSON, and a Cytoscape.js interactive viewer for the navigation graph.
+
+I'd check back after stepping away and see it had discovered 20 new screens since I last looked. That was the whole dynamic — I set direction, Claude Code did the work.
+
+---
+
+## The Feedback Loop
+
+The crawl ran in passes. After each one I'd say:
+
+> *"Run the crawl and find what we missed."*
+
+Claude Code would run the tool, read the output, and identify gaps — a tab that never got tapped, a screen behind a long scroll that was never reached, a modal that appeared only after a specific interaction sequence. It would fix the algorithm, run again, and report new screens discovered.
+
+After each pass I'd ask:
+
+> *"What changes would you make to the algorithm to make it more exhaustive?"*
+
+This produced four written algorithm revisions, each addressing the concrete failures from the previous run. Screen count across passes: 143 → 166 → 176 → 187 → 195.
+
+---
+
+## Moments That Stood Out
+
+**The `tap-label` command.** Standard `AXPress` was silently failing on segmented controls and tab bar items. Claude Code added a command that finds elements by display label regardless of AX role, then clicks the center of their bounding box using coordinates. That one addition unblocked about 30 screens that were previously unreachable.
+
+**Extracting from Assets.car.** I asked if image assets could be extracted. The standard tool (`assetutil`) only gives metadata, no pixels. Claude Code found that `CoreUI.framework` — a private macOS framework — contains the class the OS itself uses to read asset catalogs. It loaded the framework at runtime, found the right method via the ObjC runtime, and wrote a script that called it. 669 PNG files out of 20 `.car` files across the app bundle.
+
+**The "Swap" button.** It was visible on the workout screen for 3 full crawl passes and was never tapped. No error, no warning — just a gap. The v4 algorithm revision added an interaction ledger specifically to catch this: after exploring a screen, enumerate every visible interactive element and verify each one has a recorded interaction. The Swap button was the concrete example that motivated it.
+
+**The algorithm training data.** I didn't ask Claude Code to look for this — it found it while cataloging the bundle. Inside the app alongside the exercise database were several CSVs containing quantile tables, model outputs, and initial weight recommendation data used to power workout generation. It was fascinating to see how much of the recommendation logic ships as bundled data rather than server-side computation.
+
+---
+
+## What Came Out the Other End
+
+Five hours of Claude Code running nearly autonomously produced:
+
+- **195 screens** documented with full AX trees, screenshots, and UI element inventories.
+- **182 navigation transitions** in a queryable graph across 20 user flows.
+- **471 image assets** extracted and categorized — muscle group illustrations, equipment photos, icon sets, all 11 alternate app icons.
+- **4,525 localization strings** — every UI label, exercise name, and step-by-step instruction.
+- **821 exercises** with muscle groups, equipment requirements, categories, and aliases.
+- **The full database schema** — 19 Core Data entities, 204 properties, 28 migration versions showing the evolution of the data model.
+- **30 font files**, audio files, haptic patterns, Lottie animations, and the onboarding video.
+
+Total: 1,598 files, 72MB — the complete blueprint of the app.
+
+To be clear — this was a personal learning exercise. I'm not using Fitbod's proprietary assets, fonts, or data in anything I ship. The goal was to understand how a product I admire is built, and to see how far Claude Code could go as an autonomous reverse engineering tool. Everything I build from here uses original assets and my own design decisions.
+
+---
+
+## The Crawl Algorithm
+
+If you're curious about the exact prompt and algorithm I used to drive the crawl, here it is — the original prompt I started with, and the final v4 it evolved into.
+
+### The Starting Prompt
+
+<Collapse title="Original crawl prompt (v1)">
+
+Restart the application before beginning to ensure a clean, known starting state. Bring it to the foreground, take a screenshot, and dump the full accessibility tree of the front window.
+
+Depth-first crawl. On each screen, do three things before moving on:
+
+**Catalog elements.** Query the accessibility tree for every interactive element — buttons, menus (full menu bar and all submenus), toolbar items, tabs, sidebar items, list and table rows, text fields, toggles, disclosure triangles, pop-up buttons, context menus (right-click major areas), anything with AXPress or AXOpen actions.
+
+**Understand the screen.** Take a screenshot and analyze it visually. Determine what this screen's purpose is, what entities or data it displays, what capabilities it exposes (create, edit, filter, sort, search, export, share, etc.), what modes or states it's in, and what fields, forms, and controls are present with their labels, types, and constraints.
+
+**Interact and observe.** For every element and input on the screen:
+
+- Navigation elements (buttons, links, tabs, sidebar items, menu items) — click, wait for UI to settle, screenshot, dump the tree, compare. If it's a new screen, record the node and edge and immediately recurse into it before returning. If it's a known screen, record the edge and move on. Going depth-first means you're always one step from your previous state so backtracking is just closing the modal, hitting back, or switching the tab.
+
+- Input fields and forms — take a screenshot of the form or screen, visually interpret what each field expects based on labels, placeholders, grouping, and context, then generate a test matrix of sensible permutations: valid data, empty submission, invalid formats, boundary values, special characters, mismatched types, and edge cases specific to what the field represents (past dates for a birthdate field, duplicate names for a create-new form, etc.). Execute each permutation and for every attempt record validation messages, inline errors, fields highlighted, buttons that enable or disable, toasts or banners that appear, and whether submission succeeds or is blocked.
+
+- Toggles, checkboxes, dropdowns, segmented controls — try every option and state. After each change, screenshot and diff the full screen. Record sections that appear or disappear, fields that enable or disable, options that change in other controls, and any new capabilities or UI regions that are revealed. Track these as conditional edges labeled with the precondition.
+
+- Multi-step flows (wizards, onboarding, steppers) — play through completely. At each step, screenshot, interpret what choices are available, and explore every branch. If selecting one option at step 2 leads to different fields than another option, explore both. Map the full branching sub-graph.
+
+- Destructive actions (delete, remove, clear, reset) — execute them. Record the confirmation dialogs, warning messages, and resulting state changes. After the destructive action completes, record what was removed from the screen, what downstream screens were affected (item gone from lists, counts updated, empty states triggered), and what undo or recovery options are available if any. If the destructive action puts the app in a state where you need data to continue exploring (you deleted the only item in a list and now other features are inaccessible), recreate the data before continuing.
+
+After every single interaction, observe and record all of the following: UI changes such as elements appearing, disappearing, changing state, moving, or new sections revealed. Visual feedback such as toasts, banners, spinners, highlights, shake animations, or color changes. State changes such as buttons enabling or disabling, badge counts updating, progress advancing, or modes switching. Feature unlocking such as new menu items, toolbar buttons, sidebar entries, or screen sections that weren't available before. Flow changes such as redirects, modals opening, new windows spawning, or navigation guards blocking you. Downstream effects — after any significant action, navigate to related screens and check what changed there: does the new item show in the list, did the count update, did a notification appear, does the setting actually take effect.
+
+**Guardrails:** Ask me for credentials if you hit a login screen. Cap depth at 30, retry failed interactions twice then skip and note it. Track visited screens by a composite of window title, major UI element set, and modal state to avoid cycles.
+
+</Collapse>
+
+### Final Algorithm (v4)
+
+<Collapse title="View full v4 algorithm">
+
+Restart the application before beginning to ensure a clean, known starting state. Bring it to the foreground, take a screenshot, and dump the full accessibility tree of the front window.
+
+Initialize these data structures before the first interaction:
+- **Visited set**: a map of screen identity hashes to screen IDs.
+- **Navigation stack**: a stack of `{screenId, backElement}` tuples for backtracking, where `backElement` stores `{label, role, cx, cy}` of the element that will return you.
+- **Element position map**: rebuilt on every screen, maps every AX element to its bounding box and available actions.
+- **Interaction ledger**: per-screen tracker of which elements have been interacted with vs. total interactive elements.
+- **Deferred queue**: screens that were discovered but not fully explored, to be revisited at the end.
+- **Baseline snapshot**: screenshot + AX tree + element map of the initial screen after restart, used to detect state drift.
+
+**State validation on start.** Compare the baseline against the expected default state (if known from a previous crawl). If differences are detected (wrong location, changed settings, non-default configuration), flag them before proceeding. Offer to reset the app state or continue with the current state documented.
+
+#### Screen Identity
+
+A screen is identified by a hash of:
+- Window title.
+- Top 5 unique AX labels in the tree, sorted alphabetically.
+- Whether a sheet, modal, or alert is present (`AXSheet` in tree, or sheet grabber element).
+- Whether an `AXWebArea` is present (webview content).
+- The currently selected tab (if a tab bar exists, which `AXRadioButton` is selected).
+- Scroll region: top, middle, or bottom (based on whether scrolling reveals new elements).
+
+**Hash command.** The CLI tool must have a `hash` subcommand that computes and prints the screen identity hash from the current AX tree state. Run this before every screenshot. Output format:
+
+```
+Hash: abc123 [NEW]
+Hash: abc123 [DUPLICATE of workout_06_add_exercise]
+```
+
+Before capturing any screen, compute its identity hash. If the hash is already in the visited set, record the transition edge and any alternate-route metadata, then do not recurse. If it is new, add it to the visited set and proceed with the full per-screen routine.
+
+**Alternate route detection.** When a hash matches an existing screen but the arrival path is different (different source screen or different element), record the transition edge with `"alternate_entry": true`. Also compare the back-navigation element — if it differs from the original capture, record both.
+
+#### Element Discovery
+
+Do not trust AX roles to determine what is interactive. After dumping the AX tree:
+
+**Build the element position map.** For every element in the tree regardless of role, query `AXPosition` and `AXSize`. Store `{role, label, centerX, centerY, width, height, actions}` where actions comes from `AXActionNames`.
+
+**Classify elements by behavior, not role.** Apply these rules using both the AX tree and a visual analysis of the screenshot:
+
+| Visual pattern | AX role (often wrong) | Actual behavior |
+|---|---|---|
+| Text row with chevron ">" | `AXStaticText` inside `AXGroup` | Tappable navigation link |
+| Circle with checkmark or empty | `AXImage` ("radio.empty" / "selected") | Radio button |
+| Horizontal text peers ("Results" / "Recovery") | `AXStaticText` | Segmented control tab |
+| Text with toggle switch beside it | `AXCheckBox` | Toggle |
+| Row with "..." or overflow icon | `AXButton` (unlabeled) | Context menu trigger |
+| Sheet grabber bar | `AXButton` with value "Half screen" / "Full screen" | Draggable sheet handle |
+| Element inside `AXWebArea` | Various DOM roles | Web content — use webview strategy |
+| Button with numeric value (%, count) | `AXButton` with value attribute | State-display element, not navigation |
+| Dropdown arrow icon next to text | `AXButton` labeled "droparrow" | Picker control |
+
+**Classify each element's interaction type.** Before interacting, predict what will happen:
+
+| Classification | Heuristic | Interaction strategy |
+|---|---|---|
+| **Navigation element** | No value attribute. Label is a noun/destination. Has "Forward" image sibling. | Tap and recurse depth-first. |
+| **State element** | Has numeric value (percentage, count, "0"/"1"). Is `AXCheckBox`. | Toggle, record change, restore original. Do not recurse. |
+| **Action element** | Label contains verbs: Send, Export, Delete, Connect, Sync, Add, Save, Log Out. | Tap once, capture result. Do not recurse. |
+| **Picker element** | `AXPopUpButton`, or `AXButton` labeled "droparrow" adjacent to a field label. | Open, exhaust options, close without changing. |
+| **Webview trigger** | Labeled "Learn More", "Help", "?", or `AXButton` with help icon. | Tap, apply webview strategy, close. |
+
+**Navigation element priority.** Within Phase 3, process navigation elements in this order:
+1. Elements with a "Forward" image sibling (highest confidence of new screen).
+2. Elements with a chevron ">" visible in the screenshot.
+3. Remaining elements classified as navigation.
+
+#### Tapping Strategy
+
+Never guess coordinates as raw percentages. Use this priority order:
+
+1. **AXPress via role+label**: Use the `press` command to find and press an `AXButton` by its label. Most reliable when the target is unambiguously an `AXButton`.
+2. **Position-map tap with constraints**: Use the element position map to get exact center coordinates. When the label is ambiguous, disambiguate with:
+   - **Role filter**: `tap-label <label> --role AXRadioButton`
+   - **Region filter**: `tap-label <label> --region bottom`
+   - **Nearest filter**: `tap-label <label> --nearest cx,cy`
+3. **Stored-coordinate tap**: Use exact `{cx, cy}` from a previously computed element map entry. Use for backtracking and webview-adjacent controls.
+4. **Visual coordinate tap**: Last resort when the element is not in the AX tree.
+
+For tightly packed rows: use the position map's bounding boxes to verify the target element's exact Y range before tapping. If the target row is only 40px tall, a 20px miss will hit the wrong row.
+
+**Label collisions in webviews.** When an `AXWebArea` is present, never use bare `tap-label` for UI controls. Always use `--role` or `--region` constraints, or stored coordinates from the pre-webview element map.
+
+#### Per-Screen Routine
+
+On each screen, execute these four phases in order. Do not move on until all four are complete.
+
+**Phase 1: Catalog and Understand**
+
+1. Compute screen identity hash. If hash matches a visited screen, record transition edge and return without recursing.
+2. Take a screenshot.
+3. Dump the full AX tree as JSON.
+4. Build the element position map.
+5. Initialize the interaction ledger. Count every element with `AXPress` in its actions and a non-empty label. Set `interacted` to 0.
+6. Detect back-navigation element. Priority order: element labeled "Back" or "Left" with role `AXButton`; element in top-left quadrant (x < 25%, y < 15%); element whose label matches the previous screen's title; the tab bar button for the originating tab.
+7. Analyze the screenshot visually: purpose, entities displayed, capabilities exposed, modes/states, forms and controls.
+8. Exhaust scroll content. Scroll down in 80% viewport increments, dump the AX tree and diff after each scroll. Stop when unchanged after 2 consecutive scrolls. Scroll back to top before proceeding.
+9. Detect animations. If animation assets are found or two screenshots taken 1 second apart differ visually, mark the screen as `"animated": true`.
+
+**Phase 2: Test Controls and Forms (non-navigating)**
+
+Work through every control on the current screen that does not navigate away.
+
+- *Text fields* — test valid data, empty submission, boundary values, special characters, domain-specific edge cases. Record validation messages, inline errors, toasts, whether submission succeeded.
+- *Toggles, checkboxes, radio buttons* — toggle each option. Screenshot and diff. Restore the original value before continuing.
+- *Segmented controls* — tap each segment. Screenshot and diff. Return to original.
+- *Dropdown and picker controls* — mandatory. Tap to open. Exhaust the picker range (scroll to limits, record first and last values). Close without changing selection. Record in the screen JSON under a `pickers` field.
+
+**Phase 3: Navigate and Recurse (depth-first)**
+
+Work through every navigation element in priority order. Before each interaction: record the current screen identity and push the detected back-navigation element onto the navigation stack.
+
+Classify the result after each interaction:
+
+| Classification | Detection | Recording |
+|---|---|---|
+| **Full navigation** | Entire content changed. Back button appeared. | Compute hash. If new: record as node + edge, recurse. If duplicate: record edge only. |
+| **Modal / bottom sheet** | Sheet grabber present, or parent elements still in tree behind sheet. | Record as node + edge `type: sheet`. Try expanding to full screen. Recurse. |
+| **Dialog / alert** | `AXSheet` with `description: "alert"`, or system-style dialog. | Record buttons. Choose non-destructive option to dismiss. |
+| **System dialog** | AX tree unchanged but screenshot shows overlay. | Record as `type: system_dialog`. Dismiss with Escape. |
+| **External link** | AX tree unchanged. New browser window detected. | Record as `type: external_link`. Do not recurse. |
+| **Inline expansion** | Same screen, new elements appeared. | Record as state variant of current screen. Update ledger. |
+| **No change** | AX tree unchanged, no new windows, no screenshot difference. | Log as `type: no_op`. Skip. Do not retry. |
+| **Web content** | `AXWebArea` appeared in tree. | Switch to webview strategy. |
+
+Every new screen gets the full per-screen routine. Taking a screenshot and closing is not valid completion.
+
+**Backtracking.** After recursing and completing a screen: pop the navigation stack, use the stored `backElement` coordinates to tap back (do not re-search by label — avoids collisions in webviews), verify return by comparing the current screen's identity hash.
+
+**Phase 4: Completeness Audit**
+
+After Phases 1–3, before leaving the screen:
+
+1. Compare the interaction ledger: `interacted` vs `total_interactive`.
+2. Compute `coverage = interacted / total_interactive * 100`.
+3. If coverage is below 90%, list all uninteracted elements.
+4. For each uninteracted element: interact with it now (if it has `AXPress`), mark as `skipped: duplicate`, or mark as `skipped: non-interactive`.
+5. Record the final coverage in the screen JSON.
+
+```json
+"coverage": {
+  "total_interactive": 15,
+  "interacted": 14,
+  "coverage_percent": 93.3,
+  "skipped": [
+    {"label": "delete (x7)", "reason": "duplicate — same behavior as first instance"}
+  ],
+  "untapped": []
+}
+```
+
+Only after the audit passes may the crawl leave this screen.
+
+#### Webview Content Strategy
+
+When an `AXWebArea` is detected:
+
+1. Record the exact `{cx, cy}` of every control element *outside* the webview (close button, back button, tab bar). These are the **webview exit controls** — the only safe way to interact with non-web UI while the webview is active.
+2. Dump the full element map. `AXStaticText` and `AXHeading` elements inside the `AXWebArea` give you the article's structured text content.
+3. Take sequential screenshots while scrolling in 80% viewport increments.
+4. Record outbound links (`AXLink` elements) as potential edges. Follow to one level of depth maximum.
+5. To exit: use stored exit control coordinates. Verify `AXWebArea` is no longer in the AX tree.
+
+#### State-Changing and Destructive Actions
+
+**State-changing actions** — record current value, perform action, undo, verify restoration.
+
+**Destructive actions** — record what exists, execute, record what was removed and what downstream screens changed, recreate data if necessary to continue exploring.
+
+**Action elements** (Send, Export, Connect, Log Out) — tap, capture result, dismiss with non-destructive option. Record outcome without actually completing the action.
+
+**Multi-step flows** — play through entirely, exploring every branch. After completing, note any state transitions and continue crawling from the new state.
+
+**State drift check at end.** After the crawl completes, return to the initial screen and compare against the baseline snapshot.
+
+#### Deferred Queue Processing
+
+After the main depth-first crawl completes:
+
+1. For each deferred screen, navigate to it using the stored path.
+2. Run the full per-screen routine (Phases 1–4).
+3. If a deferred screen leads to further new screens, explore those immediately.
+4. Continue until the deferred queue is empty.
+
+#### Guardrails
+
+- Ask the user for credentials if you hit a login screen.
+- Cap recursion depth at 30 levels.
+- Retry failed interactions twice, then skip and log the failure.
+- If a single screen's full routine takes longer than 10 minutes, log a warning and add the screen to the deferred queue.
+- If the app crashes, relaunch, navigate back using the navigation stack, and continue.
+- Save a checkpoint every 20 screens: visited set, navigation stack, interaction ledgers, deferred queue, captured screens.
+
+#### Coverage Report
+
+After the crawl completes, generate `data/coverage_report.json`:
+
+```json
+{
+  "crawl_timestamp": "ISO8601",
+  "total_screens": 187,
+  "total_transitions": 175,
+  "total_interactive_elements": 1250,
+  "total_interacted": 1180,
+  "overall_coverage_percent": 94.4,
+  "screens_by_coverage": {
+    "100%": 155,
+    "90-99%": 22,
+    "80-89%": 7,
+    "below_80%": 3
+  },
+  "low_coverage_screens": [
+    {
+      "id": "body_01_main",
+      "coverage_percent": 62,
+      "untapped": [
+        {"label": "Body Fat Percentage", "role": "AXButton", "classification": "navigation"}
+      ]
+    }
+  ],
+  "deferred_not_completed": [],
+  "duplicate_screens_found": [
+    {"hash": "abc123", "ids": ["workout_06_add_exercise", "workout_create_from_scratch"]}
+  ],
+  "alternate_routes": [
+    {"screen": "log_11_workout_detail", "routes": ["calendar date tap", "past workouts list tap"]}
+  ]
+}
+```
+
+The crawl is not complete until: every screen has coverage ≥ 90% (or all untapped elements are explicitly skipped with reason), the deferred queue is empty, and state drift is zero or documented.
+
+</Collapse>

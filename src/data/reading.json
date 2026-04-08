@@ -1,38 +1,20 @@
 [
   {
-    "title": "Thinking in Systems",
-    "author": "Donella H. Meadows",
+    "title": "Designing Data-Intensive Applications",
+    "author": "Martin Kleppmann",
     "status": "Reading",
     "color": "#1D9E75",
-    "quickTake": "Changed how I think about org design",
-    "cover": "https://m.media-amazon.com/images/I/51hqXnXFMkL._SY445_SX342_.jpg",
+    "quickTake": "The bible for distributed systems thinking",
+    "cover": "https://m.media-amazon.com/images/I/51ZSpMl1-LL._SY445_SX342_.jpg",
     "order": 1
   },
   {
-    "title": "Designing Data Apps",
-    "author": "Brian Wilke",
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
     "status": "Reading",
-    "color": "#6B6860",
-    "quickTake": "Shaping our analytics product thinking",
-    "cover": "https://m.media-amazon.com/images/I/41VjBFlagTL._SY445_SX342_.jpg",
-    "order": 2
-  },
-  {
-    "title": "Staff Engineer",
-    "author": "Will Larson",
-    "status": "Finished",
     "color": "#D85A30",
-    "quickTake": "Essential for the IC→leadership transition",
-    "cover": "https://m.media-amazon.com/images/I/41fsfMalqVL._SY445_SX342_.jpg",
-    "order": 3
-  },
-  {
-    "title": "The Art of Action",
-    "author": "Stephen Bungay",
-    "status": "Finished",
-    "color": "#993C1D",
-    "quickTake": "Strategy execution for engineering orgs",
-    "cover": "https://m.media-amazon.com/images/I/41kB0GZ-0CL._SY445_SX342_.jpg",
-    "order": 4
+    "quickTake": "How cognitive biases shape every decision",
+    "cover": "https://m.media-amazon.com/images/I/41shZGS-G+L._SY445_SX342_.jpg",
+    "order": 2
   }
 ]

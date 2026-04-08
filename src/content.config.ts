@@ -5,7 +5,7 @@ const hexColor = z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a hex color like
 const youtubeIdFormat = z.string().regex(/^[a-zA-Z0-9_-]{0,11}$/).default('');
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -22,11 +22,12 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    subtitle: z.string(),
-    color: hexColor,
-    techStack: z.array(z.string()),
+    description: z.string(),
+    summary: z.string().optional(),
+    url: z.union([z.string().url(), z.literal('')]).default(''),
+    github: z.union([z.string().url(), z.literal('')]).default(''),
+    techStack: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
-    impact: z.array(z.object({ metric: z.string(), label: z.string() })),
   }),
 });
 
@@ -44,17 +45,5 @@ const talks = defineCollection({
   }),
 });
 
-const products = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/products' }),
-  schema: z.object({
-    title: z.string(),
-    tagline: z.string(),
-    description: z.string(),
-    type: z.enum(['web', 'mobile', 'oss', 'template', 'download']),
-    url: z.union([z.string().url(), z.literal('')]).default(''),
-    featured: z.boolean().default(false),
-    status: z.enum(['live', 'beta', 'coming-soon']).default('live'),
-  }),
-});
 
-export const collections = { blog, projects, talks, products };
+export const collections = { blog, projects, talks };

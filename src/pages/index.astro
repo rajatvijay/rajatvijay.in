@@ -17,7 +17,6 @@ const socialSvgs: Record<string, string> = {
 
 const allPosts = await getSortedPosts();
 const allProjects = (await getCollection('projects')).filter(p => p.data.featured);
-const featuredProducts = (await getCollection('products')).filter(p => p.data.featured);
 const currentlyReading = readingData.filter(b => b.status === 'Reading');
 const github = await getGitHubData();
 
@@ -144,29 +143,16 @@ const levelClass = ['none', 'low', 'med', 'high'];
     )}
 
     {allProjects.length > 0 && <section class="featured-section" data-reveal>
-      <h2 class="label">FEATURED PROJECTS</h2>
+      <h2 class="label">PROJECTS</h2>
       <div class="featured-grid">
         {allProjects.slice(0, 3).map(project => (
-          <a href={`/projects/${project.id}`} class="featured-card surface-card">
+          <a href={project.data.github || `/projects`} target={project.data.github ? "_blank" : undefined} rel={project.data.github ? "noopener noreferrer" : undefined} class="featured-card surface-card">
             <h3>{project.data.title}</h3>
-            <p class="meta">{project.data.subtitle}</p>
+            <p class="meta">{project.data.description}</p>
           </a>
         ))}
       </div>
       <a href="/projects" class="section-link teal-text">All projects <span class="arrow">&rarr;</span></a>
-    </section>}
-
-    {featuredProducts.length > 0 && <section class="featured-section" data-reveal>
-      <h2 class="label">FEATURED PRODUCTS</h2>
-      <div class="featured-grid">
-        {featuredProducts.slice(0, 3).map(product => (
-          <a href={`/products/${product.id}`} class="featured-card surface-card">
-            <h3>{product.data.title}</h3>
-            <p class="meta">{product.data.tagline}</p>
-          </a>
-        ))}
-      </div>
-      <a href="/products" class="section-link teal-text">All products <span class="arrow">&rarr;</span></a>
     </section>}
 
     {currentlyReading.length > 0 && (
