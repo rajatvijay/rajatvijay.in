@@ -2,6 +2,7 @@ const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN || process.env.GITHUB_TOKEN;
 
 interface ContributionDay {
   contributionCount: number;
+  contributionLevel: string;
   date: string;
   weekday: number;
 }
@@ -10,6 +11,14 @@ interface ContributionWeek {
   contributionDays: ContributionDay[];
 }
 
+const LEVEL_MAP: Record<string, number> = {
+  NONE: 0,
+  FIRST_QUARTILE: 1,
+  SECOND_QUARTILE: 2,
+  THIRD_QUARTILE: 3,
+  FOURTH_QUARTILE: 3,
+};
+
 export interface ContributionData {
   totalContributions: number;
   weeks: { levels: number[] }[];
@@ -17,13 +26,6 @@ export interface ContributionData {
 
 export interface GitHubData {
   contributions: ContributionData;
-}
-
-function contributionLevel(count: number): number {
-  if (count === 0) return 0;
-  if (count <= 3) return 1;
-  if (count <= 8) return 2;
-  return 3;
 }
 
 async function fetchGitHub(query: string) {
@@ -68,6 +70,7 @@ export async function getGitHubData(): Promise<GitHubData> {
           weeks {
             contributionDays {
               contributionCount
+              contributionLevel
               date
               weekday
             }
@@ -84,7 +87,7 @@ export async function getGitHubData(): Promise<GitHubData> {
   const calendar = data.data.viewer.contributionsCollection.contributionCalendar;
 
   const weeks = calendar.weeks.map((w: ContributionWeek) => ({
-    levels: w.contributionDays.map((d: ContributionDay) => contributionLevel(d.contributionCount)),
+    levels: w.contributionDays.map((d: ContributionDay) => LEVEL_MAP[d.contributionLevel] ?? 0),
   }));
 
   return {
