@@ -538,6 +538,42 @@ pre code {
   border-top: 1px solid var(--border);
   margin: 40px 0;
 }
+.prose-blog table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  display: block;
+}
+.prose-blog thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.prose-blog tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.prose-blog th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+  background: var(--surface);
+}
+.prose-blog td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  vertical-align: top;
+}
+.prose-blog tbody tr:last-child td {
+  border-bottom: none;
+}
 .prose-blog details {
   border: 1px solid var(--border);
   border-radius: 8px;

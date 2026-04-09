@@ -98,7 +98,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
         </section>
         <section class="activity-feed">
           <h2 class="label">ACTIVITY</h2>
-          <div class="github-widget surface-card">
+          <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="github-widget surface-card">
             <p class="meta github-label">GitHub</p>
             <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
               {github.contributions.weeks.map((week, i) => (
@@ -109,7 +109,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
                 </div>
               ))}
             </div>
-          </div>
+          </a>
           <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
             <p class="topmate-heading">Got a question? Let's talk.</p>
             <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
@@ -121,7 +121,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
       <div class="home-activity-solo" data-reveal>
         <section class="activity-feed">
           <h2 class="label">ACTIVITY</h2>
-          <div class="github-widget surface-card">
+          <a href="https://github.com/rajatvijay" target="_blank" rel="noopener noreferrer" class="github-widget surface-card">
             <p class="meta github-label">GitHub</p>
             <div class="contrib-grid" role="img" aria-label={`GitHub contribution graph: ${github.contributions.totalContributions} contributions in the last year`}>
               {github.contributions.weeks.map((week, i) => (
@@ -132,7 +132,7 @@ const levelClass = ['none', 'low', 'med', 'high'];
                 </div>
               ))}
             </div>
-          </div>
+          </a>
           <a href="https://topmate.io/rajatvijay" target="_blank" rel="noopener noreferrer" class="topmate-card surface-card">
             <p class="topmate-heading">Got a question? Let's talk.</p>
             <p class="topmate-tagline">Frontend → leadership transitions, AI product strategy, mock interviews, or just a random tech chat.</p>
@@ -427,7 +427,15 @@ const levelClass = ['none', 'low', 'med', 'high'];
     min-width: 0;
   }
   .github-widget {
+    display: block;
     overflow: hidden;
+    color: var(--text-secondary);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .github-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    color: var(--text-secondary);
   }
   @media (max-width: 900px) {
     .home-grid { grid-template-columns: 1fr; }

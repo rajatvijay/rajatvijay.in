@@ -161,7 +161,14 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://rajatvijay
   .post-tags {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
     margin: 16px 0 8px;
+  }
+  @media (max-width: 768px) {
+    .post-tags .pill {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+    }
   }
   .prose {
     margin: 32px 0;

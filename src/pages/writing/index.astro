@@ -86,7 +86,18 @@ const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))];
   .writing-tags {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
     padding-bottom: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .tags-row {
+      gap: 6px;
+    }
+    .tags-row .pill {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+    }
   }
 
   /* Coming soon */
